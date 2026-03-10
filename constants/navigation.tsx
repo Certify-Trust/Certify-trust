@@ -18,7 +18,7 @@ export const navigation: INavigation = (params?: INavigationParams) => [
   {
     id: 1,
     title: "About",
-    href: "/about",
+    href: "#",
     subRoutes: [],
     activeRoutes: ["/about"],
     // icon: <AboutIcon />,
@@ -26,7 +26,7 @@ export const navigation: INavigation = (params?: INavigationParams) => [
   {
     id: 2,
     title: "Contribute",
-    href: "/contribute",
+    href: "#",
     subRoutes: [],
     activeRoutes: ["/contribute"],
     icon: <DownIcon />,
