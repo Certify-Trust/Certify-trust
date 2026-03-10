@@ -1,0 +1,34 @@
+import DownIcon from "@/assets/icons/DownIcon";
+
+export interface INavigationItem {
+  id: number;
+  title: string;
+  href: string;
+  subRoutes: INavigationItem[];
+  activeRoutes: string[];
+  icon?: React.ReactNode;
+}
+
+export type INavigation = (params?: INavigationParams) => INavigationItem[];
+
+export interface INavigationParams {
+  id?: string;
+}
+export const navigation: INavigation = (params?: INavigationParams) => [
+  {
+    id: 1,
+    title: "About",
+    href: "/about",
+    subRoutes: [],
+    activeRoutes: ["/about"],
+    // icon: <AboutIcon />,
+  },
+  {
+    id: 2,
+    title: "Contribute",
+    href: "/contribute",
+    subRoutes: [],
+    activeRoutes: ["/contribute"],
+    icon: <DownIcon />,
+  },
+];
