@@ -33,7 +33,7 @@ function Logo({
           height="24.8181"
           rx="12.4091"
           fill="#D6CBFF"
-          shape-rendering="crispEdges"
+          shapeRendering="crispEdges"
         />
         <path
           d="M18.9736 12.5379C19.1929 12.1081 19.8069 12.1081 20.0262 12.5379L21.666 15.7511C21.7519 15.9193 21.913 16.0364 22.0996 16.066L25.6622 16.6327C26.1387 16.7084 26.3284 17.2924 25.9875 17.6338L23.4383 20.1863C23.3048 20.3199 23.2433 20.5093 23.2727 20.6959L23.8347 24.2593C23.9099 24.7359 23.4131 25.0968 22.9831 24.878L19.7678 23.2423C19.5995 23.1567 19.4003 23.1567 19.232 23.2423L16.0167 24.878C15.5867 25.0968 15.0899 24.7359 15.1651 24.2593L15.7271 20.6959C15.7565 20.5093 15.695 20.3199 15.5615 20.1863L13.0123 17.6338C12.6714 17.2924 12.8611 16.7084 13.3376 16.6327L16.9003 16.066C17.0868 16.0364 17.2479 15.9193 17.3338 15.7511L18.9736 12.5379Z"
@@ -52,9 +52,9 @@ function Logo({
           width="24.8181"
           height="25.9999"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"

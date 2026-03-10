@@ -51,14 +51,14 @@ export default function Header() {
   return (
     <>
       <nav
-        className={`fixed top-0 z-50 h-[103px] w-full border-b border-white/20 bg-[#FFFFFF1F] px-6 backdrop-blur-sm transition-all duration-300 ${boxShadow ? "shadow-sm" : ""}`}
+        className={`fixed top-0 z-50 h-[103px] w-full border-b border-[#E8E8E8] bg-[#FFFFFF1F] px-6 backdrop-blur-sm transition-all duration-300 ${boxShadow ? "shadow-sm" : ""}`}
       >
         <div className="mx-auto flex h-full max-w-[1312px] items-center justify-between">
-          <Link href="/" className="hidden cursor-pointer min-[931px]:block">
+          <Link href="/" className="hidden cursor-pointer sm:block">
             <Logo />
           </Link>
-          <Link href="/" className="cursor-pointer min-[931px]:hidden">
-            <Logo width={112} height={35} />
+          <Link href="/" className="cursor-pointer sm:hidden">
+            <Logo width={119} height={40} />
           </Link>
 
           <motion.div
@@ -67,7 +67,7 @@ export default function Header() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             // key={(manualOverride ? showDesktopNav : boxShadow).toString()}
-            className="hidden items-center gap-6 gap-8 min-[931px]:flex"
+            className="hidden items-center gap-6 gap-8 min-[730px]:flex"
           >
             {navigation().map((item) => {
               const isActive = pathname.startsWith(item.href);
@@ -75,7 +75,7 @@ export default function Header() {
                 <Link
                   key={item.id}
                   href={item.href}
-                  className={`font-spline flex items-center gap-2 text-base font-[380] transition-colors hover:text-[#3842E2] ${
+                  className={`flex items-center gap-2 text-base font-[380] transition-colors hover:text-[#3842E2] ${
                     isActive ? "text-[#3842E2]" : "text-[#080808]"
                   }`}
                 >
@@ -98,7 +98,7 @@ export default function Header() {
 
           {/* Hamburger */}
           <div
-            className="cursor-pointer min-[931px]:hidden"
+            className="cursor-pointer min-[730px]:hidden"
             onClick={toggleNav}
           >
             {/* <AiOutlineMenu size={25} /> */}

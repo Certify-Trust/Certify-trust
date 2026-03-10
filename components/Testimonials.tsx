@@ -9,6 +9,7 @@ import Rating from "@/assets/icons/Rating";
 export default function Testimonials({
   feedbackData,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   feedbackData: any[];
 }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -18,7 +19,7 @@ export default function Testimonials({
   // Detect screen size
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+      setIsMobile(window.innerWidth < 900); // lg breakpoint
     };
 
     checkMobile();

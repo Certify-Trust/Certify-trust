@@ -4,19 +4,20 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 const logos = [
-  { src: "/trusted/washington.svg", alt: "Washington Post" },
-  { src: "/trusted/techcrush.svg", alt: "TechCrunch" },
-  { src: "/trusted/bloomberg.svg", alt: "Bloomberg" },
-  { src: "/trusted/gizmodo.svg", alt: "Gizmodo" },
-  { src: "/trusted/forbes.svg", alt: "Forbes" },
+  { src: "/tools/moodle.svg", alt: "moodle Post" },
+  { src: "/tools/canvas.svg", alt: "canvas" },
+  { src: "/tools/open.svg", alt: "open" },
+  { src: "/tools/blackboard.svg", alt: "blackboard" },
+  { src: "/tools/googleClass.svg", alt: "googleClass" },
+  { src: "/tools/wordpress.svg", alt: "wordpress" },
 ];
 
 const Tools = () => {
   return (
     <section className="w-full bg-white py-12 sm:py-16">
-      <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 sm:px-6">
-        <p className="text-center font-sans text-base text-gray-600">
-          Trusted by top institutions around the world
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-6">
+        <p className="text-center font-sans text-[40px] leading-tight font-semibold text-gray-900">
+          Connect to the tools you already trust
         </p>
 
         {/* Carousel */}
@@ -51,9 +52,9 @@ const Tools = () => {
                 <Image
                   src={logo.src}
                   alt={logo.alt}
-                  width={40}
-                  height={40}
-                  className="h-6 w-auto sm:h-7 md:h-8 lg:h-9"
+                  width={76}
+                  height={76}
+                  className="h-14 w-auto md:h-19"
                 />
               </motion.div>
             ))}

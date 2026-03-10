@@ -42,7 +42,7 @@ const Credential = () => {
     <section className="bg-[#F9F8FC] px-6 py-20">
       <div className="mx-auto max-w-[1280px]">
         <div className="flex flex-col items-center gap-6">
-          <h3 className="text-[40px] font-semibold text-gray-900">
+          <h3 className="text-center text-[40px] leading-tight font-semibold text-gray-900">
             Everything you need to credential at scale
           </h3>
           <p className="max-w-[958px] text-center text-xl leading-[30px] text-gray-600">

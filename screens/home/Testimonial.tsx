@@ -5,11 +5,11 @@ const Testimonial = () => {
   return (
     <section id="section2" className="">
       <div className="mx-auto flex max-w-[1280px] flex-col px-6 py-24">
-        <div className="flex items-start justify-between">
-          <h1 className="max-w-[635px] text-[40px] leading-tight font-[450] text-gray-900">
+        <div className="flex flex-col items-start gap-4 min-[812px]:flex-row min-[812px]:justify-between">
+          <h1 className="text-[40px] leading-tight font-[450] text-gray-900 min-[812px]:max-w-[635px]">
             Education leaders rely on Certifytrusts to scale recognition
           </h1>
-          <p className="max-w-[484px] text-xl font-light text-gray-600">
+          <p className="text-xl font-light text-gray-600 min-[812px]:max-w-[484px]">
             Get instant notifications when jobs that match your interest are
             listed, helping you act quickly .
           </p>
