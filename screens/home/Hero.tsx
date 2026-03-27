@@ -16,9 +16,9 @@ const Hero = () => {
               The world’s first open‑source blockchain credentials platform.
             </h1>
             <p className="text-xl leading-[28px] text-gray-600 min-[1024px]:max-w-[596.9px]">
-              Velocity Digital is a founder-led seed fund. Our team blends
-              operator experience, investing discipline, and deep local context
-              to help African startups move faster and go further.
+              Issue secure and highly customizable digital credentials that not
+              only scale seamlessly with your organization but also maintain
+              their trustworthiness and integrity over time.
             </p>
           </div>
 

@@ -4,11 +4,11 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 const logos = [
-  { src: "/trusted/washington.svg", alt: "Washington Post" },
-  { src: "/trusted/techcrush.svg", alt: "TechCrunch" },
-  { src: "/trusted/bloomberg.svg", alt: "Bloomberg" },
-  { src: "/trusted/gizmodo.svg", alt: "Gizmodo" },
-  { src: "/trusted/forbes.svg", alt: "Forbes" },
+  { src: "/trusted/edusproute.svg", alt: "edusproute" },
+  { src: "/trusted/thrive.svg", alt: "thrive" },
+  { src: "/trusted/Quiickops.svg", alt: "Quiickops" },
+  { src: "/trusted/nob.svg", alt: "NOB" },
+  { src: "/trusted/tech.svg", alt: "Abuja Tech Converge" },
 ];
 
 const Trusted = () => {
@@ -16,7 +16,7 @@ const Trusted = () => {
     <section className="w-full bg-white py-12 sm:py-16">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 sm:px-6">
         <p className="text-center font-sans text-base text-gray-600">
-          Trusted by top institutions around the world
+          Trusted by leading associations, and technology companies
         </p>
 
         {/* Carousel */}
