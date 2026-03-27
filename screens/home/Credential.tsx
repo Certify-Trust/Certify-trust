@@ -4,7 +4,7 @@ const cards = [
   {
     title: "Issue Blockchain verifiable certificates",
     description:
-      "With secure logins, team access control, and intuitive interfaces, companies can now manage applicants through a streamlined hiring process.",
+      "Secure your credentials with blockchain-powered verification. Issue tamper-proof certificates that can be instantly validated anywhere, ensuring trust, transparency, and authenticity for every achievement.",
     bg: "bg-[#FBF7F4]",
     image:
       "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=800",
@@ -12,21 +12,21 @@ const cards = [
   {
     title: "Customise Credentials Portal",
     description:
-      "With secure logins, team access control, and intuitive interfaces, companies can now manage applicants through a streamlined hiring process.",
+      "Create a branded credentials portal that reflects your organization’s identity. Personalize the design, colors, and layout to offer recipients a seamless and professional certificate experience.",
     bg: "bg-[#EEF3FB]",
     image: "/unsplash.jpg",
   },
   {
     title: "Issue Credentials at any Scale",
     description:
-      "With secure logins, team access control, and intuitive interfaces, companies can now manage applicants through a streamlined hiring process.",
+      "Effortlessly manage credentialing for any audience size. Whether you're issuing dozens or thousands of certificates, our platform ensures fast, accurate, and scalable delivery every time.",
     bg: "bg-[#EEF6EA]",
     image: "/unsplash.jpg",
   },
   {
     title: "Instant verification with dynamic QR",
     description:
-      "With secure logins, team access control, and intuitive interfaces, companies can now manage applicants through a streamlined hiring process.",
+      "Enable instant credential validation through dynamic QR codes. Recipients and verifiers can scan to confirm authenticity in real time, ensuring secure and effortless trust verification.",
     bg: "bg-[#E8F3F1]",
     image:
       "https://images.unsplash.com/photo-1595079676339-1534801ad6cf?auto=format&fit=crop&q=80&w=800",
@@ -34,14 +34,14 @@ const cards = [
   {
     title: "Exportable PDF certificates",
     description:
-      "With secure logins, team access control, and intuitive interfaces, companies can now manage applicants through a streamlined hiring process.",
+      "Give recipients the flexibility to download and share their credentials easily. Each certificate can be exported as a professionally designed PDF, ready for printing, sharing, or digital display.",
     bg: "bg-[#F2E9F5]",
     image: "/cert.jpg",
   },
   {
     title: "REST API and webhooks",
     description:
-      "With secure logins, team access control, and intuitive interfaces, companies can now manage applicants through a streamlined hiring process.",
+      "Seamlessly integrate credential issuance into your existing systems. Our REST API and webhooks enable automated workflows, real-time updates, and effortless data synchronization across platforms.",
     bg: "bg-[#F6F0E5]",
     image:
       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800",
@@ -57,8 +57,8 @@ const Credential = () => {
             Everything you need to credential at scale
           </h3>
           <p className="max-w-[958px] text-center text-xl leading-[30px] text-gray-600">
-            Apply to jobs from reputable startups and companies in Africa and
-            worldwide and stay protected from fake postings.
+            Design, automate, and monitor certificates and badges, reducing
+            manual effort and enhancing the learner experience.
           </p>
         </div>
 
