@@ -3,16 +3,15 @@ import InstagramIcon from "@/assets/icons/InstagramIcon";
 import Logo from "@/assets/icons/Logo";
 import SocialIcon from "@/assets/icons/SocialIcon";
 import XIcon from "@/assets/icons/XIcon";
-import { navigation } from "@/constants/navigation";
+import { footerNavigation, navigation } from "@/constants/navigation";
 import Link from "next/link";
-import React from "react";
 
 function Footer() {
   const year = new Date().getFullYear();
   return (
-    <section className="relative min-h-[416px] bg-[#080808]">
+    <section className="relative min-h-[352px] bg-[#080808]">
       <svg
-        className="absolute top-0 left-0 min-h-[416px] w-full"
+        className="pointer-events-none absolute top-0 left-0 min-h-[352px] w-full"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -57,14 +56,20 @@ function Footer() {
           </radialGradient>
         </defs>
       </svg>
-      <div className="px-6 py-[56px] text-[#FFFFFF]">
+      <div className="z-30 px-6 py-[56px] text-[#FFFFFF]">
         <div className="m-auto flex max-w-[1280px] flex-col justify-between gap-[60px] min-[735px]:flex-row">
           <div className="z-10">
             <Logo />
-            <p className="mt-6 max-w-[315px] text-lg font-normal">
+            {/* <p className="mt-6 max-w-[315px] text-lg font-normal">
               We are a fund by founders for founders in Africa and around the
               world.
-            </p>
+            </p> */}
+
+            <div className="mt-5 flex items-center gap-[20.5px]">
+              <XIcon />
+              <InstagramIcon />
+              <SocialIcon />
+            </div>
           </div>
 
           <div className="flex w-[270px] justify-between min-[380px]:w-[335px]">
@@ -72,11 +77,11 @@ function Footer() {
               <h5 className="text-lg font-[450] text-[#FCFCFC]">Company</h5>
 
               <div className="mt-4 flex flex-col gap-1">
-                {navigation().map((item) => (
+                {footerNavigation().map((item) => (
                   <Link
                     key={item.id}
                     href={item.href}
-                    className="flex items-center gap-2 text-base font-light transition-colors hover:text-gray-500"
+                    className="flex cursor-pointer items-center gap-2 text-base font-light transition-colors hover:text-gray-500"
                   >
                     {item.title}
                   </Link>
@@ -90,7 +95,7 @@ function Footer() {
               <div className="mt-4 flex flex-col gap-1">
                 <Link
                   href="/"
-                  className="flex items-center gap-2 text-base font-light transition-colors hover:text-gray-500"
+                  className="flex cursor-pointer items-center gap-2 text-base font-light transition-colors hover:text-gray-500"
                 >
                   Work with us
                 </Link>
@@ -107,10 +112,10 @@ function Footer() {
               <p>Certifytrusts © Copyright {year}</p>
             </div>
 
-            <div className="flex items-center gap-[20.5px]">
-              <XIcon />
-              <InstagramIcon />
-              <SocialIcon />
+            <div className="flex items-center gap-5">
+              <p>Privacy Policy</p>
+              <p>Accessibility</p>
+              <p>Terms of services</p>
             </div>
           </div>
         </div>

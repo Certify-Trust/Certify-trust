@@ -32,3 +32,30 @@ export const navigation: INavigation = (params?: INavigationParams) => [
     icon: <DownIcon />,
   },
 ];
+
+export const footerNavigation: INavigation = (params?: INavigationParams) => [
+  {
+    id: 1,
+    title: "About",
+    href: "#",
+    subRoutes: [],
+    activeRoutes: ["/about"],
+    // icon: <AboutIcon />,
+  },
+  {
+    id: 2,
+    title: "Portfolio",
+    href: "#",
+    subRoutes: [],
+    activeRoutes: ["/contribute"],
+    icon: <DownIcon />,
+  },
+  {
+    id: 3,
+    title: "Team",
+    href: "#",
+    subRoutes: [],
+    activeRoutes: ["/team"],
+    icon: <DownIcon />,
+  },
+];

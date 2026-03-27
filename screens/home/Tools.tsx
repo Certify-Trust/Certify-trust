@@ -15,9 +15,14 @@ const logos = [
 const Tools = () => {
   return (
     <section className="w-full bg-white py-12 sm:py-16">
-      <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-6">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-5 px-6">
         <p className="text-center font-sans text-[40px] leading-tight font-semibold text-gray-900">
           Connect to the tools you already trust
+        </p>
+
+        <p className="mb-[60px] max-w-[702px] text-center font-sans text-base text-gray-600">
+          Seamlessly connect with your LMS and CRM using our native
+          integrations, REST API, and webhooks.
         </p>
 
         {/* Carousel */}

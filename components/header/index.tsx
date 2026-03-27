@@ -19,7 +19,7 @@ export default function Header() {
   const [boxShadow, setBoxShadow] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const donateRef = useRef<HTMLDivElement | null>(null);
+  const donateRef = useRef<HTMLButtonElement | null>(null);
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 
@@ -72,6 +72,24 @@ export default function Header() {
           >
             {navigation().map((item) => {
               const isActive = pathname.startsWith(item.href);
+
+              // HANDLE CONTRIBUTE CLICK
+              if (item.title === "Contribute") {
+                return (
+                  <button
+                    key={item.id}
+                    ref={donateRef}
+                    onClick={toggleModal}
+                    className={`flex cursor-pointer items-center gap-2 text-base font-[380] transition-colors hover:text-[#3842E2] ${
+                      isActive ? "text-[#3842E2]" : "text-[#080808]"
+                    }`}
+                  >
+                    {item.title}
+                    {item.icon && <span>{item.icon}</span>}
+                  </button>
+                );
+              }
+
               return (
                 <Link
                   key={item.id}
@@ -81,9 +99,7 @@ export default function Header() {
                   }`}
                 >
                   {item.title}
-                  {item.icon && (
-                    <span className="flex items-center">{item.icon}</span>
-                  )}
+                  {item.icon && <span>{item.icon}</span>}
                 </Link>
               );
             })}
@@ -92,7 +108,9 @@ export default function Header() {
               Get Certifytrusts
             </button>
 
-            <div ref={donateRef} onClick={toggleModal}>
+            <div
+            // ref={donateRef} onClick={toggleModal}
+            >
               <DonateIcon />
             </div>
           </motion.div>
