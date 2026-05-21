@@ -1,7 +1,7 @@
-import React from "react";
+import LoginScreen from "@/screens/login/auth/login";
 
 const LoginPage = () => {
-  return <div>LOGIN</div>;
+  return <LoginScreen />;
 };
 
 export default LoginPage;

@@ -1,3 +1,4 @@
+"use client";
 import { CustomInputProps } from "@/types/input";
 import React, { useState } from "react";
 import { useFormContext, FieldValues, FieldError } from "react-hook-form";
@@ -155,7 +156,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
       ) : (
         <div
           className={twMerge(
-            "relative my-2 h-[40px] w-full rounded-md border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
+            "relative my-2 h-10 w-full rounded-[1px] border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
             wrapperClassName,
           )}
         >
@@ -165,7 +166,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
             {...registerField}
             placeholder={placeholder}
             className={twMerge(
-              "accent-blueDark-800 h-[38px] w-full rounded-md px-3 text-gray-600 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
+              "accent-blueDark-800 h-[38px] w-full rounded-[1px] px-3 text-gray-600 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
               inputClass,
             )}
             disabled={disabled}

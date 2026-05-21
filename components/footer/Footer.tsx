@@ -3,11 +3,11 @@ import InstagramIcon from "@/assets/icons/InstagramIcon";
 import Logo from "@/assets/icons/Logo";
 import SocialIcon from "@/assets/icons/SocialIcon";
 import XIcon from "@/assets/icons/XIcon";
+import { year } from "@/constants/date";
 import { footerNavigation, navigation } from "@/constants/navigation";
 import Link from "next/link";
 
 function Footer() {
-  const year = new Date().getFullYear();
   return (
     <section className="relative min-h-[352px] bg-[#080808]">
       <svg
