@@ -1,5 +1,7 @@
+import FeatureIcon from "@/assets/icons/FeatureIcon";
 import InfoIcon from "@/assets/icons/InfoIcon";
 import LinkednIcon from "@/assets/icons/LinkednIcon";
+import MessageIcon from "@/assets/icons/MessageIcon";
 import PlusIcon from "@/assets/icons/PlusIcon";
 import XIcon from "@/assets/icons/XIcon";
 import { Button } from "@/components/ui/button";
@@ -43,6 +45,33 @@ const recipientData = [
     ),
     value: 0,
     percentage: "0%",
+  },
+];
+
+const setupCards = [
+  {
+    icon: <LinkednIcon width={44} height={44} />,
+    title: "Single click enable your LinkedIn profile",
+    description:
+      "Add your LinkedIn organisation ID to allow your recipients to easily add their badges and certificates to LinkedIn",
+    linkText: "Update Social Media Settings",
+    href: "#",
+  },
+  {
+    icon: <MessageIcon width={44} height={44} />,
+    title: "Create an email campaign",
+    description:
+      "Boost engagement, send an email campaign that motivates recipients to share their badges and certificates.",
+    linkText: "Email Campaign Settings",
+    href: "#",
+  },
+  {
+    icon: <FeatureIcon />,
+    title: "Feature Request",
+    description:
+      "Help us improve. Submit a feature request and our team will review your feedback.",
+    linkText: "Submit Feature Request",
+    href: "#",
   },
 ];
 
@@ -109,7 +138,7 @@ const OverviewScreen = () => {
           <div className="mt-6 grid grid-cols-2 gap-6">
             {recipientData.map(({ label, value, percentage }, index) => (
               <div key={index}>
-                <p className="text-sm text-[#475467]">{label}</p>
+                <div className="text-sm text-[#475467]">{label}</div>
 
                 <div className="mt-2 flex items-center gap-2">
                   <h3 className="text-[36px] leading-none font-semibold tracking-[-1px] text-[#101828]">
@@ -148,8 +177,34 @@ const OverviewScreen = () => {
           Set up your organization profile to get started
         </h2>
 
-        <div className="mt-[24px]">
-          <div className="min-h-[216.2px] rounded-[7px] border border-gray-200"></div>
+        <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {setupCards.map(
+            ({ icon, title, description, linkText, href }, index) => (
+              <div
+                key={index}
+                className="flex min-h-[216px] flex-col rounded-lg border border-[#E4E7EC] bg-white p-5"
+              >
+                <div className="flex-1">
+                  <div className="mb-4">{icon}</div>
+
+                  <h5 className="font-semibold text-gray-900">{title}</h5>
+
+                  <p className="mt-4 text-[13px] leading-6 text-gray-500">
+                    {description}
+                  </p>
+                </div>
+
+                <Link
+                  href={href}
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-[#5324FB]"
+                >
+                  {linkText}
+
+                  <ArrowRight width={18} height={18} />
+                </Link>
+              </div>
+            ),
+          )}
         </div>
       </div>
     </div>

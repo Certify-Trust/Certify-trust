@@ -134,9 +134,9 @@
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_137_3202" result="shape"/>
 </filter>
 <linearGradient id="paint0_linear_137_3202" x1="307.207" y1="168.571" x2="354.224" y2="539.963" gradientUnits="userSpaceOnUse">
-<stop stop-color="#B49FFF"/>
-<stop offset="0.463077" stop-color="white"/>
-<stop offset="1" stop-color="#B9A6FF" stop-opacity="0.74"/>
+<stop stopColor="#B49FFF"/>
+<stop offset="0.463077" stopColor="white"/>
+<stop offset="1" stopColor="#B9A6FF" stop-opacity="0.74"/>
 </linearGradient>
 <clipPath id="clip0_137_3202">
 <rect x="108.355" y="23.2063" width="436.526" height="452.055" rx="6.9016" fill="white"/>
