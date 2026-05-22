@@ -1,7 +1,7 @@
-import React from "react";
+import OverviewScreen from "@/screens/dashboard/overview";
 
 const OverviewPage = () => {
-  return <div>OverviewPage</div>;
+  return <OverviewScreen />;
 };
 
 export default OverviewPage;

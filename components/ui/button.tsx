@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-[#5324FB] text-white hover:bg-[#5324FB]/80 bg-[length:200%_100%] hover:animate-bg-slide",
+          "bg-[#5324FB] text-white hover:bg-[#5324FB]/90 bg-[length:200%_100%] hover:animate-bg-slide",
         defaultReverse: "bg-white text-[#5324FB] ",
         white: "bg-white text-grey-700 hover:bg-grey-200/90",
         destructive:
@@ -29,7 +29,7 @@ const buttonVariants = cva(
           "border border-[#F4EBFF] bg-[#F0ECFF] text-[#5324FB] font-semibold hover:bg-accent",
       },
       size: {
-        default: " px-[18px] py-[10px]",
+        default: "px-[18px] py-[10px]",
         md: "px-4 py-7",
         sm: "w-[84px] text-center",
         lg: "h-11  px-8",

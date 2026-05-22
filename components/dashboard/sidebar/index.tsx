@@ -94,7 +94,7 @@ function Sidebar() {
 
         <div
           className={`${
-            active ? "mt-7" : "mt-0"
+            active ? "mt-7" : "mt-18"
           } transition-all duration-300 ease-in-out`}
         >
           {active ? (

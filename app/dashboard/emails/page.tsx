@@ -1,7 +1,5 @@
 const EmailsPage = () => {
-  return (
-    <div className="flex h-[500px] items-center justify-center">Email</div>
-  );
+  return <div className="flex h-125 items-center justify-center">Email</div>;
 };
 
 export default EmailsPage;

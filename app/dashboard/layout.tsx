@@ -10,17 +10,9 @@ import React from "react";
 
 interface DashLayoutProps {
   children: React.ReactNode;
-  records?: boolean;
-  post?: boolean;
-  calendar?: boolean;
 }
 
-export default function DashboardLayout({
-  children,
-  records = false,
-  post = false,
-  calendar = false,
-}: DashLayoutProps) {
+export default function DashboardLayout({ children }: DashLayoutProps) {
   return (
     <main>
       <div className="flex min-h-screen">
@@ -30,7 +22,7 @@ export default function DashboardLayout({
         <div className="w-full bg-white">
           <DashboardHeader />
           <div className="custom-scrollbar flex overflow-y-scroll">
-            <div className="flex-1 pr-2 pb-7 pl-4 sm:pr-5 md:pr-6 lg:pl-10">
+            <div className="mt-8 mr-2 ml-4 flex-1 pb-7 sm:mr-5 md:mr-6 lg:ml-7.5">
               {children}
             </div>
           </div>
