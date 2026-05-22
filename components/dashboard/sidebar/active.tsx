@@ -38,7 +38,7 @@ const ActiveSidebar = ({ active, transition }: ActiveSidebarProps) => {
                 <div
                   className={`flex cursor-pointer items-center gap-3 text-gray-700 transition-all duration-300 ease-in-out hover:rounded-md hover:bg-gray-50 hover:text-gray-900 ${
                     index === activeIndex
-                      ? "h-10 rounded-md border border-transparent bg-gray-50 py-2 text-gray-900"
+                      ? "h-10 rounded-md bg-gray-50 py-2 text-gray-900"
                       : "h-10 py-2"
                   }`}
                 >

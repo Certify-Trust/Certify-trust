@@ -38,13 +38,16 @@ function InactiveSidebar({ active }: props) {
     <div>
       <div className="grow">
         {sidebarData.map((group, index) => (
-          <div key={index} className="my-4 flex flex-col items-center px-8">
+          <div
+            key={index}
+            className="my-4 flex flex-col items-center bg-red-300 px-8"
+          >
             <Link href={group.link}>
               <div
                 className={`flex cursor-pointer items-center gap-3 transition-all duration-300 ease-in-out hover:rounded-md hover:bg-gray-50 ${
                   index === activeIndex
-                    ? "h-[40px] rounded-md border border-transparent bg-gray-50 px-4 py-2"
-                    : "h-[40px] px-4 py-2"
+                    ? "h-10 rounded-md bg-gray-50 px-4 py-2"
+                    : "h-10 px-4 py-2"
                 }`}
                 data-tooltip-id={`${index}`}
                 data-tooltip-content={`${group.title}`}
