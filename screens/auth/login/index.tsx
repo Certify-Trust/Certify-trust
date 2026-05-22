@@ -20,8 +20,6 @@ const schema = z.object({
     .nonempty("Email is required")
     .trim()
     .toLowerCase(),
-  //   password: z.string().min(6, 'Password must be at least 6 characters').nonempty('Password is required'),
-  //   rememberMe: z.boolean().default(false),
 });
 
 type FormData = z.infer<typeof schema>;

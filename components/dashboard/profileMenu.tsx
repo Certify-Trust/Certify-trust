@@ -133,8 +133,6 @@ const icons = {
   ),
 };
 
-// Menu config
-
 type MenuItem =
   | {
       type: "link";

@@ -1,79 +1,10 @@
-import FeatureIcon from "@/assets/icons/FeatureIcon";
+import BulbIcon from "@/assets/icons/BulbIcon";
 import InfoIcon from "@/assets/icons/InfoIcon";
-import LinkednIcon from "@/assets/icons/LinkednIcon";
-import MessageIcon from "@/assets/icons/MessageIcon";
 import PlusIcon from "@/assets/icons/PlusIcon";
-import XIcon from "@/assets/icons/XIcon";
 import { Button } from "@/components/ui/button";
+import { recipientData, reportData, setupCards } from "@/constants/mockdata";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-
-const reportData = [
-  {
-    label: "Issued all time",
-    value: 0,
-  },
-  {
-    label: "Recipients all time",
-    value: 0,
-  },
-  {
-    label: "Opened all time",
-    value: 0,
-  },
-  {
-    label: "Shared all time",
-    value: 0,
-  },
-];
-
-const recipientData = [
-  {
-    label: (
-      <div className="flex gap-1">
-        <LinkednIcon /> <span>LinkedIn Shares</span>
-      </div>
-    ),
-    value: 0,
-    percentage: "0%",
-  },
-  {
-    label: (
-      <div className="flex gap-1">
-        <XIcon /> <span>X Shares</span>
-      </div>
-    ),
-    value: 0,
-    percentage: "0%",
-  },
-];
-
-const setupCards = [
-  {
-    icon: <LinkednIcon width={44} height={44} />,
-    title: "Single click enable your LinkedIn profile",
-    description:
-      "Add your LinkedIn organisation ID to allow your recipients to easily add their badges and certificates to LinkedIn",
-    linkText: "Update Social Media Settings",
-    href: "#",
-  },
-  {
-    icon: <MessageIcon width={44} height={44} />,
-    title: "Create an email campaign",
-    description:
-      "Boost engagement, send an email campaign that motivates recipients to share their badges and certificates.",
-    linkText: "Email Campaign Settings",
-    href: "#",
-  },
-  {
-    icon: <FeatureIcon />,
-    title: "Feature Request",
-    description:
-      "Help us improve. Submit a feature request and our team will review your feedback.",
-    linkText: "Submit Feature Request",
-    href: "#",
-  },
-];
 
 const OverviewScreen = () => {
   return (
@@ -154,7 +85,7 @@ const OverviewScreen = () => {
           {/* LinkedIn Notice */}
           <div className="mt-8 flex items-start gap-3 rounded-sm border border-[#B2DDFF] bg-[#EFF8FF] p-4">
             <div className="mt-0.5 text-[#1570EF]">
-              <InfoIcon />
+              <InfoIcon stroke="#0A66C2" />
             </div>
             <p className="text-sm text-[#344054]">
               Add your LinkedIn URL to improve your results
@@ -207,6 +138,8 @@ const OverviewScreen = () => {
           )}
         </div>
       </div>
+
+      <BulbIcon className="fixed right-4 bottom-5 transition hover:scale-104" />
     </div>
   );
 };

@@ -5,12 +5,14 @@ import { Link as LinkScroll } from "react-scroll";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import Logo from "@/assets/icons/Logo";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { navigation } from "@/constants/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import DonateIcon from "@/assets/icons/DonateIcon";
+import Modal from "../modal/customModal";
 // import MenuIcon from "@/assets/icons/MenuIcon";
+import SignInModal from "../modal/SignInModal";
 
 export default function Header() {
   const pathname = usePathname();
@@ -18,6 +20,7 @@ export default function Header() {
   const [nav, setNav] = useState(false);
   const [boxShadow, setBoxShadow] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [signInModal, setSignInModal] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const donateRef = useRef<HTMLButtonElement | null>(null);
 
@@ -53,9 +56,9 @@ export default function Header() {
   return (
     <>
       <nav
-        className={`fixed top-0 z-50 h-[103px] w-full border-b border-[#E8E8E8] bg-[#FFFFFF1F] bg-white px-6 backdrop-blur-sm transition-all duration-300 ${boxShadow ? "shadow-sm" : ""}`}
+        className={`fixed top-0 z-50 h-25.75 w-full border-b border-[#E8E8E8] bg-[#FFFFFF1F] bg-white px-6 backdrop-blur-sm transition-all duration-300 ${boxShadow ? "shadow-sm" : ""}`}
       >
-        <div className="relative mx-auto flex h-full max-w-[1312px] items-center justify-between">
+        <div className="relative mx-auto flex h-full max-w-328 items-center justify-between">
           <Link href="/" className="hidden cursor-pointer sm:block">
             <Logo />
           </Link>
@@ -68,7 +71,7 @@ export default function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="hidden items-center gap-6 gap-8 min-[730px]:flex"
+            className="hidden items-center gap-6 min-[730px]:flex"
           >
             {navigation().map((item) => {
               const isActive = pathname.startsWith(item.href);
@@ -104,8 +107,11 @@ export default function Header() {
               );
             })}
 
-            <button className="cursor-pointer rounded-[100px] bg-[#5324FB] px-3 py-2 text-white">
-              Get Certifytrusts
+            <button
+              onClick={() => setSignInModal(true)}
+              className="cursor-pointer rounded-[100px] bg-[#5324FB] px-3 py-2 text-white"
+            >
+              Sign in
             </button>
 
             <div
@@ -245,11 +251,28 @@ export default function Header() {
             <DonateIcon />
           </div> */}
 
-          <button className="cursor-pointer rounded-[100px] bg-[#5324FB] px-3 py-2 text-white">
-            Get Certifytrusts
+          <button
+            onClick={() => setSignInModal(true)}
+            className="cursor-pointer rounded-[100px] bg-[#5324FB] px-3 py-2 text-white"
+          >
+            Sign in
           </button>
         </div>
       </aside>
+
+      {signInModal && (
+        <Modal
+          size="full"
+          headerTextStyle="text-xl font-medium"
+          closeIconSize="text-2xl"
+          headerStyle="text-xl flex justify-between px-[32px] pt-[22px]"
+          header={true}
+          isOpen={signInModal}
+          onClose={() => setSignInModal(false)}
+        >
+          <SignInModal />
+        </Modal>
+      )}
     </>
   );
 }
