@@ -44,7 +44,7 @@ const LoginScreen = () => {
       <div className="hidden items-center justify-center bg-[#000000] p-2 sm:flex sm:w-1/2">
         <Image src={loginImage} alt="" />
       </div>
-      <div className="p-4 sm:w-1/2 sm:p-8">
+      <div className="px-4 py-8 sm:w-1/2 sm:p-8">
         <GoBackButton />
 
         <div className="flex h-full flex-col">
@@ -90,7 +90,7 @@ const LoginScreen = () => {
             <div className="flex justify-center text-sm">
               <p>
                 Don&apos;t have an account?
-                <Link href="/jobs/select-role" className="pl-1 text-[#5324FB]">
+                <Link href="/auth/sign-up" className="pl-1 text-[#5324FB]">
                   Sign up
                 </Link>
               </p>

@@ -12,7 +12,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   label,
   type,
   onChange,
-  labelClass = "text-sm font-medium text-gray-700",
+  labelClass = "text-sm font-normal text-gray-700",
   field = {},
   wrapperClassName,
   inputClass,
@@ -39,11 +39,14 @@ const CustomInput: React.FC<CustomInputProps> = ({
     typeof errorMessage === "string" ? errorMessage : undefined;
 
   return (
-    <div className="mb-4">
+    <div className="mb-2">
       {type !== "checkbox" && type !== "radio" && (
         <label
           htmlFor={id}
-          className={twMerge("block pb-[6px] text-sm font-normal", labelClass)}
+          className={twMerge(
+            "block pb-[6px] text-sm font-normal text-gray-700",
+            labelClass,
+          )}
         >
           {label}
         </label>
@@ -166,7 +169,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
             {...registerField}
             placeholder={placeholder}
             className={twMerge(
-              "accent-blueDark-800 h-[38px] w-full rounded-[1px] px-3 text-gray-600 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
+              "accent-blueDark-800 h-[38px] w-full rounded-[1px] px-3 text-gray-600 placeholder:text-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none",
               inputClass,
             )}
             disabled={disabled}
