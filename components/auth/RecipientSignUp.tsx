@@ -9,13 +9,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import avatar from "@/public/auth/signup.svg";
-import { ArrowLeft } from "lucide-react";
+import recipientIMG from "@/public/auth/recipientIMG.svg";
 import GoBackButton from "@/components/back-button";
 import { year } from "@/constants/date";
 import SignupLayer from "@/components/layers/SignupLayer";
 import { useRouter } from "next/navigation";
-import useAppSelector from "@/hooks/useAppSelector";
-import RecipientSignUp from "@/components/auth/RecipientSignUp";
 
 const schema = z
   .object({
@@ -40,9 +38,8 @@ const schema = z
 
 type FormData = z.infer<typeof schema>;
 
-const SignupScreen = () => {
+const RecipientSignUp = () => {
   const { push } = useRouter();
-  const selectedRole = useAppSelector((state) => state.auth.selectedRole);
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -58,20 +55,28 @@ const SignupScreen = () => {
 
     push("/auth/verify-email");
   };
-  return selectedRole === "issuer" ? (
+  return (
     <div className="flex min-h-screen">
-      <div className="px-4 py-8 sm:w-1/2 sm:p-8">
+      <div className="relative hidden items-center justify-center bg-[#100049] p-2 sm:relative sm:top-0 sm:left-0 sm:flex sm:h-screen sm:w-1/2">
+        <SignupLayer className="top-0 right-0" />
+
+        <Image src={recipientIMG} alt="" loading="eager" />
+
+        <SignupLayer className="bottom-0 left-0" />
+      </div>
+
+      <div className="w-full px-4 py-8 sm:w-1/2 sm:p-8">
         <GoBackButton />
 
         <div className="flex h-full flex-col space-y-6">
           <div className="flex flex-1 flex-col justify-center gap-8">
             <div className="mb-2">
               <h2 className="text-center text-[32px] text-gray-900 sm:text-left">
-                Join the Premier Digital Credential Platform!
+                Create a new Earner account
               </h2>
-              <p className="mt-3 text-center text-gray-600">
+              {/* <p className="mt-3 text-center text-gray-600">
                 Issue shareable, verifiable digital badges and certificates
-              </p>
+              </p> */}
             </div>
 
             <FormProvider {...methods}>
@@ -102,9 +107,9 @@ const SignupScreen = () => {
                   <CustomInput
                     name="email"
                     id="email"
-                    label="Work Email Address"
+                    label="Email Address"
                     type="email"
-                    placeholder="Enter your work email address"
+                    placeholder="Enter your email address"
                     error={
                       errors.email?.message
                         ? String(errors.email.message)
@@ -151,7 +156,7 @@ const SignupScreen = () => {
                   />
                 </div>
 
-                <div className="mt-2 mb-6 flex flex-wrap gap-1 text-sm text-gray-700">
+                <div className="mt-12 mb-6 flex flex-wrap gap-1 text-sm text-gray-700">
                   <span>By signing up, you agree to our </span> {"  "}
                   <Link href="#" className="text-nowrap text-[#5324FB]">
                     Terms & Conditions
@@ -195,18 +200,8 @@ const SignupScreen = () => {
           </div>
         </div>
       </div>
-
-      <div className="hidden items-center justify-center bg-[#0F2465] p-2 sm:fixed sm:top-0 sm:right-0 sm:flex sm:h-screen sm:w-1/2">
-        <SignupLayer className="top-0 right-0" />
-
-        <Image src={avatar} alt="" loading="eager" />
-
-        <SignupLayer className="bottom-0 left-0" />
-      </div>
     </div>
-  ) : (
-    <RecipientSignUp />
   );
 };
 
-export default SignupScreen;
+export default RecipientSignUp;

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,15 +11,14 @@ import card1 from "@/public/dashboard/card1.svg";
 import Logo from "@/assets/icons/Logo";
 
 import { setSelectedRole } from "@/redux/reducers/authSlice";
-import useAppSelector from "@/hooks/useAppSelector";
 import useAppDispatch from "@/hooks/useAppDispatch";
 
 const SignInModal = () => {
   const dispatch = useAppDispatch();
 
-  const selectedRole = useAppSelector((state) => state.auth.selectedRole);
-
-  console.log(selectedRole);
+  const [selectedRole, setLocalSelectedRole] = useState<
+    "issuer" | "recipient" | null
+  >(null);
 
   const options = [
     {
@@ -59,7 +58,7 @@ const SignInModal = () => {
               key={option.id}
               type="button"
               onClick={() =>
-                dispatch(setSelectedRole(option.id as "issuer" | "recipient"))
+                setLocalSelectedRole(option.id as "issuer" | "recipient")
               }
               className={`flex min-h-43.5 cursor-pointer flex-col items-center rounded-lg border p-4 transition-all duration-300 ${
                 isSelected
@@ -79,7 +78,15 @@ const SignInModal = () => {
         })}
       </div>
 
-      <Link href="/auth/login" className="w-full">
+      <Link
+        href="/auth/login"
+        className="w-full"
+        onClick={() => {
+          if (selectedRole) {
+            dispatch(setSelectedRole(selectedRole));
+          }
+        }}
+      >
         <Button size="full" className="mt-4" disabled={!selectedRole}>
           Continue
         </Button>

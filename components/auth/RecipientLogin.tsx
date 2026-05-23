@@ -115,7 +115,7 @@ const RecipientLogin = () => {
         <SignupLayer className="top-0 left-0" />
 
         <div>
-          <Image src={recipientIMG} alt="" />
+          <Image src={recipientIMG} alt="" loading="eager" />
         </div>
 
         <SignupLayer className="bottom-0 left-0" />
@@ -195,7 +195,7 @@ const RecipientLogin = () => {
 
                     <div className="mt-2 flex justify-end">
                       <Link
-                        href="/auth/forgot-password"
+                        href="/auth/reset-password"
                         className="text-sm text-[#5324FB]"
                       >
                         Forgot password?

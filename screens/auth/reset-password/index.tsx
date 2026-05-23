@@ -1,6 +1,5 @@
 "use client";
 import CustomInput from "@/components/custom-input/custom-input";
-import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,7 +8,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import loginImage from "@/public/auth/login.svg";
-import { ArrowLeft } from "lucide-react";
 import GoBackButton from "@/components/back-button";
 import { year } from "@/constants/date";
 import useAppSelector from "@/hooks/useAppSelector";
@@ -17,6 +15,7 @@ import SignupLayer from "@/components/layers/SignupLayer";
 import recipientIMG from "@/public/auth/recipientIMG.svg";
 import RecipientLogin from "@/components/auth/RecipientLogin";
 import { useRouter } from "next/navigation";
+import RecipientResetPassword from "@/components/auth/RecipientResetPassword";
 
 const schema = z.object({
   email: z
@@ -29,7 +28,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const LoginScreen = () => {
+const ResetPasswordScreen = () => {
   const { push } = useRouter();
   const selectedRole = useAppSelector((state) => state.auth.selectedRole);
 
@@ -46,7 +45,7 @@ const LoginScreen = () => {
   const onSubmit = (data: FormData) => {
     console.log(data);
 
-    push("/auth/code-verification");
+    push("/dashboard/login");
   };
   return selectedRole === "issuer" ? (
     <div className="flex h-screen">
@@ -55,13 +54,13 @@ const LoginScreen = () => {
         <Image src={loginImage} alt="" loading="eager" />
         <SignupLayer className="bottom-0 left-0" />
       </div>
-      <div className="px-4 py-8 sm:w-1/2 sm:p-8">
+      <div className="w-full px-4 py-8 sm:w-1/2 sm:p-8">
         <GoBackButton />
 
         <div className="flex h-full flex-col">
           <div className="flex flex-1 flex-col justify-center gap-8">
             <h2 className="text-center text-[32px] text-gray-900 sm:text-left">
-              Login to the Premier Digital Credential Platform!
+              Reset Password
             </h2>
 
             <FormProvider {...methods}>
@@ -80,12 +79,14 @@ const LoginScreen = () => {
                   }
                 />
 
-                <div className="flex justify-end">
-                  <Link
-                    href="/auth/reset-password"
-                    className="items-end text-sm text-[#5324FB]"
-                  >
-                    Forgot password?
+                <div className="mt-14 mb-6 flex flex-wrap gap-1 text-sm text-gray-700">
+                  <span>By signing up, you agree to our </span> {"  "}
+                  <Link href="#" className="text-nowrap text-[#5324FB]">
+                    Terms & Conditions
+                  </Link>
+                  and
+                  <Link href="#" className="text-[#5324FB]">
+                    Privacy Policy
                   </Link>
                 </div>
 
@@ -95,7 +96,7 @@ const LoginScreen = () => {
                   className=""
                   disabled={!isValid}
                 >
-                  Login
+                  Send Reset Email
                   {/* {isLoading ? (
               <div>
                 <PacmanLoader color="white" size={10} />
@@ -125,8 +126,8 @@ const LoginScreen = () => {
     </div>
   ) : (
     // receipient
-    <RecipientLogin />
+    <RecipientResetPassword />
   );
 };
 
-export default LoginScreen;
+export default ResetPasswordScreen;

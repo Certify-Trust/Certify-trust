@@ -1,21 +1,20 @@
 "use client";
-import CustomInput from "@/components/custom-input/custom-input";
-import React from "react";
+
+import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { motion } from "framer-motion";
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import SignupLayer from "../layers/SignupLayer";
 import Image from "next/image";
-import loginImage from "@/public/auth/login.svg";
-import { ArrowLeft } from "lucide-react";
-import GoBackButton from "@/components/back-button";
+import GoBackButton from "../back-button";
+import CustomInput from "../custom-input/custom-input";
+import Link from "next/link";
+import { Button } from "../ui/button";
 import { year } from "@/constants/date";
-import useAppSelector from "@/hooks/useAppSelector";
-import SignupLayer from "@/components/layers/SignupLayer";
 import recipientIMG from "@/public/auth/recipientIMG.svg";
-import RecipientLogin from "@/components/auth/RecipientLogin";
+
 import { useRouter } from "next/navigation";
 
 const schema = z.object({
@@ -29,16 +28,15 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const LoginScreen = () => {
-  const { push } = useRouter();
-  const selectedRole = useAppSelector((state) => state.auth.selectedRole);
+const RecipientResetPassword = () => {
+  const router = useRouter();
 
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
+
   const {
-    register,
     handleSubmit,
     formState: { errors, isValid },
   } = methods;
@@ -46,22 +44,23 @@ const LoginScreen = () => {
   const onSubmit = (data: FormData) => {
     console.log(data);
 
-    push("/auth/code-verification");
+    router.push("/dashboard/overview");
   };
-  return selectedRole === "issuer" ? (
+
+  return (
     <div className="flex h-screen">
       <div className="relative hidden items-center justify-center bg-[#000000] p-2 sm:flex sm:w-1/2">
         <SignupLayer className="top-0 right-0" />
-        <Image src={loginImage} alt="" loading="eager" />
+        <Image src={recipientIMG} alt="" loading="eager" />
         <SignupLayer className="bottom-0 left-0" />
       </div>
-      <div className="px-4 py-8 sm:w-1/2 sm:p-8">
+      <div className="w-full px-4 py-8 sm:w-1/2 sm:p-8">
         <GoBackButton />
 
         <div className="flex h-full flex-col">
           <div className="flex flex-1 flex-col justify-center gap-8">
             <h2 className="text-center text-[32px] text-gray-900 sm:text-left">
-              Login to the Premier Digital Credential Platform!
+              Reset Password
             </h2>
 
             <FormProvider {...methods}>
@@ -69,10 +68,10 @@ const LoginScreen = () => {
                 <CustomInput
                   name="email"
                   id="email"
-                  label="Work Email Address"
+                  label="Email Address"
                   type="email"
                   labelClass="text-gray-700"
-                  placeholder="Enter your work email address"
+                  placeholder="Enter your email address"
                   error={
                     errors.email?.message
                       ? String(errors.email.message)
@@ -80,12 +79,14 @@ const LoginScreen = () => {
                   }
                 />
 
-                <div className="flex justify-end">
-                  <Link
-                    href="/auth/reset-password"
-                    className="items-end text-sm text-[#5324FB]"
-                  >
-                    Forgot password?
+                <div className="mt-14 mb-6 flex flex-wrap gap-1 text-sm text-gray-700">
+                  <span>By signing up, you agree to our </span> {"  "}
+                  <Link href="#" className="text-nowrap text-[#5324FB]">
+                    Terms & Conditions
+                  </Link>
+                  and
+                  <Link href="#" className="text-[#5324FB]">
+                    Privacy Policy
                   </Link>
                 </div>
 
@@ -95,7 +96,7 @@ const LoginScreen = () => {
                   className=""
                   disabled={!isValid}
                 >
-                  Login
+                  Send Reset Email
                   {/* {isLoading ? (
               <div>
                 <PacmanLoader color="white" size={10} />
@@ -123,10 +124,7 @@ const LoginScreen = () => {
         </div>
       </div>
     </div>
-  ) : (
-    // receipient
-    <RecipientLogin />
   );
 };
 
-export default LoginScreen;
+export default RecipientResetPassword;
