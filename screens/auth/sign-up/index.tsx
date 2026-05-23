@@ -16,6 +16,8 @@ import SignupLayer from "@/components/layers/SignupLayer";
 import { useRouter } from "next/navigation";
 import useAppSelector from "@/hooks/useAppSelector";
 import RecipientSignUp from "@/components/auth/RecipientSignUp";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import { setSelectedRole } from "@/redux/reducers/authSlice";
 
 const schema = z
   .object({
@@ -42,6 +44,7 @@ type FormData = z.infer<typeof schema>;
 
 const SignupScreen = () => {
   const { push } = useRouter();
+  const dispatch = useAppDispatch();
   const selectedRole = useAppSelector((state) => state.auth.selectedRole);
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -180,13 +183,20 @@ const SignupScreen = () => {
               </form>
             </FormProvider>
 
-            <div className="flex justify-center text-sm">
+            <div className="flex flex-col items-center gap-4 text-sm min-[851px]:flex-row min-[851px]:justify-between">
               <p>
-                Don&apos;t have an account?
+                Already have an account?
                 <Link href="/auth/login" className="pl-1 text-[#5324FB]">
                   Login
                 </Link>
               </p>
+
+              <button
+                onClick={() => dispatch(setSelectedRole("recipient"))}
+                className="text-[#5324FB] underline underline-offset-2"
+              >
+                I’m a credential holder
+              </button>
             </div>
           </div>
 
@@ -205,7 +215,7 @@ const SignupScreen = () => {
       </div>
     </div>
   ) : (
-    <RecipientSignUp />
+    <RecipientSignUp fromIssuer />
   );
 };
 

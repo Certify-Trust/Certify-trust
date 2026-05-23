@@ -14,6 +14,12 @@ import GoBackButton from "@/components/back-button";
 import { year } from "@/constants/date";
 import SignupLayer from "@/components/layers/SignupLayer";
 import { useRouter } from "next/navigation";
+import { setSelectedRole } from "@/redux/reducers/authSlice";
+import useAppDispatch from "@/hooks/useAppDispatch";
+
+interface RecipientSignUpProps {
+  fromIssuer?: boolean;
+}
 
 const schema = z
   .object({
@@ -38,8 +44,9 @@ const schema = z
 
 type FormData = z.infer<typeof schema>;
 
-const RecipientSignUp = () => {
-  const { push } = useRouter();
+const RecipientSignUp = ({ fromIssuer = false }: RecipientSignUpProps) => {
+  const { push, back } = useRouter();
+  const dispatch = useAppDispatch();
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -66,7 +73,15 @@ const RecipientSignUp = () => {
       </div>
 
       <div className="w-full px-4 py-8 sm:w-1/2 sm:p-8">
-        <GoBackButton />
+        <GoBackButton
+          onClick={() => {
+            if (fromIssuer) {
+              dispatch(setSelectedRole("issuer"));
+            } else {
+              back();
+            }
+          }}
+        />
 
         <div className="flex h-full flex-col space-y-6">
           <div className="flex flex-1 flex-col justify-center gap-8">
