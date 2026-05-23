@@ -1,12 +1,21 @@
+"use client";
+
 import BulbIcon from "@/assets/icons/BulbIcon";
+import File from "@/assets/icons/File";
 import InfoIcon from "@/assets/icons/InfoIcon";
 import PlusIcon from "@/assets/icons/PlusIcon";
+import Shield from "@/assets/icons/Shield";
+import Trophy from "@/assets/icons/Trophy";
+import { ActionsDropdown } from "@/components/dropdown/ActionsDropDown";
 import { Button } from "@/components/ui/button";
 import { recipientData, reportData, setupCards } from "@/constants/mockdata";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const OverviewScreen = () => {
+  const { push } = useRouter();
+
   return (
     <div className="space-y-10">
       {/* Header */}
@@ -21,10 +30,31 @@ const OverviewScreen = () => {
           </p>
         </div>
 
-        <Button className="flex h-11 items-center gap-2 rounded-md px-5 font-semibold">
-          <PlusIcon />
-          Quick Create
-        </Button>
+        <ActionsDropdown
+          trigger={
+            <Button className="flex h-11 items-center gap-2 rounded-md px-5 font-semibold">
+              <PlusIcon />
+              Quick Create
+            </Button>
+          }
+          items={[
+            {
+              icon: <File />,
+              label: "Create a Certificate Design",
+              onClick: () => push("/dashboard/designs"),
+            },
+            {
+              icon: <Shield />,
+              label: "Create a Badge Design",
+              onClick: () => console.log("New Invoice"),
+            },
+            {
+              icon: <Trophy />,
+              label: "Create a Group",
+              onClick: () => push("/dashboard/groups"),
+            },
+          ]}
+        />
       </div>
 
       {/* Cards */}
@@ -44,9 +74,9 @@ const OverviewScreen = () => {
           <div className="mt-6 grid grid-cols-2 gap-y-8 lg:grid-cols-4">
             {reportData.map(({ label, value }) => (
               <div key={label}>
-                <p className="text-sm text-[#475467]">{label}</p>
+                <p className="text-sm text-gray-700">{label}</p>
 
-                <h3 className="mt-2 text-[36px] font-semibold tracking-[-1px] text-[#101828]">
+                <h3 className="mt-2 text-[28px] font-semibold tracking-[-1px] text-gray-800">
                   {value}
                 </h3>
               </div>
@@ -72,7 +102,7 @@ const OverviewScreen = () => {
                 <div className="text-sm text-[#475467]">{label}</div>
 
                 <div className="mt-2 flex items-center gap-2">
-                  <h3 className="text-[36px] leading-none font-semibold tracking-[-1px] text-[#101828]">
+                  <h3 className="text-[28px] leading-none font-semibold tracking-[-1px] text-gray-800">
                     {value}
                   </h3>
 
