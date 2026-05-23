@@ -44,7 +44,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
         <label
           htmlFor={id}
           className={twMerge(
-            "block pb-[6px] text-sm font-normal text-gray-700",
+            "block text-sm font-normal text-gray-700",
             labelClass,
           )}
         >
@@ -223,7 +223,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
             </button>
           )}
           {renderErrorMessage && (
-            <p className="mt-[2px] text-xs text-red-500">
+            <p className="mt-[1px] text-xs text-red-500">
               {renderErrorMessage}
             </p>
           )}

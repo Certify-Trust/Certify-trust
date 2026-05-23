@@ -12,6 +12,11 @@ import loginImage from "@/public/auth/login.svg";
 import { ArrowLeft } from "lucide-react";
 import GoBackButton from "@/components/back-button";
 import { year } from "@/constants/date";
+import useAppSelector from "@/hooks/useAppSelector";
+import SignupLayer from "@/components/layers/SignupLayer";
+import recipientIMG from "@/public/auth/recipientIMG.svg";
+import RecipientLogin from "@/components/auth/RecipientLogin";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   email: z
@@ -25,19 +30,25 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const LoginScreen = () => {
+  const { push } = useRouter();
+  const selectedRole = useAppSelector((state) => state.auth.selectedRole);
+
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
+    mode: "onChange",
   });
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = methods;
 
   const onSubmit = (data: FormData) => {
     console.log(data);
+
+    push("/dashboard/overview");
   };
-  return (
+  return selectedRole === "issuer" ? (
     <div className="flex h-screen">
       <div className="hidden items-center justify-center bg-[#000000] p-2 sm:flex sm:w-1/2">
         <Image src={loginImage} alt="" />
@@ -60,7 +71,11 @@ const LoginScreen = () => {
                   type="email"
                   labelClass="text-gray-700"
                   placeholder="Enter your work email address"
-                  // error={errors.email?.message ? String(errors.email.message) : undefined}
+                  error={
+                    errors.email?.message
+                      ? String(errors.email.message)
+                      : undefined
+                  }
                 />
 
                 <div className="flex justify-end">
@@ -72,7 +87,12 @@ const LoginScreen = () => {
                   </Link>
                 </div>
 
-                <Button type="submit" size="full" className="">
+                <Button
+                  type="submit"
+                  size="full"
+                  className=""
+                  disabled={!isValid}
+                >
                   Login
                   {/* {isLoading ? (
               <div>
@@ -101,6 +121,9 @@ const LoginScreen = () => {
         </div>
       </div>
     </div>
+  ) : (
+    // receipient
+    <RecipientLogin />
   );
 };
 

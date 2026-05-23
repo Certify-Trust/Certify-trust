@@ -152,6 +152,7 @@ const baseItemClass =
   "flex cursor-pointer text-sm font-medium text-gray-700 items-center px-4 py-2 hover:bg-gray-50";
 
 function ProfileMenu() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef<HTMLUListElement | null>(null);
 
@@ -217,6 +218,7 @@ function ProfileMenu() {
       icon: icons.logout,
       onClick: () => {
         /* handleLogout() */ close();
+        router.push("/");
       },
     },
   ];
