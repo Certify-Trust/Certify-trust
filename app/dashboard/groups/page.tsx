@@ -1,5 +1,7 @@
+import GroupsScreen from "@/screens/groups";
+
 const GroupsPage = () => {
-  return <div className="flex h-125 items-center justify-center">Groups</div>;
+  return <GroupsScreen />;
 };
 
 export default GroupsPage;

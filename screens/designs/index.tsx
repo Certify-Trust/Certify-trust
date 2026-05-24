@@ -1,13 +1,16 @@
 "use client";
 
+import EmptyStateIcon from "@/assets/icons/EmptyStateIcon";
 import { ActionsDropdown } from "@/components/dropdown/ActionsDropDown";
 import EmptyState from "@/components/empty";
+import DashboardFilter from "@/components/filters/dashboard-filter";
+
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Search } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 const DesignsScreen = () => {
   return (
-    <div className="space-y-10">
+    <div className="min-h-screen space-y-5">
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
         <div>
@@ -36,35 +39,25 @@ const DesignsScreen = () => {
         />
       </div>
 
-      <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        {/* Search */}
-        <div className="relative w-full md:w-[260px]">
-          <Search
-            size={18}
-            className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
-          />
+      <DashboardFilter />
 
-          <input
-            type="text"
-            placeholder="Search for design name..."
-            className="w-full rounded-xl border border-gray-300 bg-white py-3 pr-4 pl-10 text-sm transition outline-none focus:border-gray-500"
-          />
-        </div>
-
-        {/* Collection Dropdown */}
-        <button className="flex items-center justify-between gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 md:w-[180px]">
-          <span>Collections</span>
-          <ChevronDown size={18} />
-        </button>
-
-        {/* Appearance Dropdown */}
-        <button className="flex items-center justify-between gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 md:w-[180px]">
-          <span>Appearance</span>
-          <ChevronDown size={18} />
-        </button>
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <EmptyState
+          icon={<EmptyStateIcon />}
+          description="You don’t have any certificate or badge designs yet. Create your first design now!"
+          actions={[
+            {
+              label: "Create Badge Design",
+              onClick: () => console.log("badge"),
+              variant: "pricing",
+            },
+            {
+              label: "Create Certificate Design",
+              onClick: () => console.log("certificate"),
+            },
+          ]}
+        />
       </div>
-
-      <EmptyState />
     </div>
   );
 };

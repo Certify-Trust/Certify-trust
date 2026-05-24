@@ -1,24 +1,52 @@
 import React from "react";
 import { Button } from "../ui/button";
-import EmptyStateIcon from "@/assets/icons/EmptyStateIcon";
 
-const EmptyState = () => {
+type EmptyStateAction = {
+  label: string;
+  onClick: () => void;
+  variant?: React.ComponentProps<typeof Button>["variant"];
+};
+
+type EmptyStateProps = {
+  icon?: React.ReactNode;
+  title?: string;
+  description?: string;
+  actions?: EmptyStateAction[];
+  className?: string;
+};
+
+const EmptyState = ({
+  icon,
+  title,
+  description,
+  actions = [],
+  className = "",
+}: EmptyStateProps) => {
   return (
-    <div className="mx-auto mt-8 flex w-full flex-col items-center justify-center space-y-4">
-      <EmptyStateIcon />
+    <div
+      className={`flex w-full flex-col items-center justify-center text-center ${className}`}
+    >
+      {icon}
 
-      <p className="text-center text-sm font-medium">
-        You don’t have any certificate or badge designs yet. Create your first
-        design now!
-      </p>
+      {title && <h2 className="mt-3 text-lg font-semibold">{title}</h2>}
 
-      <div className="mt-6 flex w-full flex-col gap-6 sm:max-w-105.5 sm:flex-row">
-        <Button size="full" variant="pricing" className="flex-1">
-          Create Badge Design
-        </Button>
-        <Button size="full" className="flex-1">
-          Create Certificate Design
-        </Button>
+      {description && (
+        <p className="text-muted-foreground mt-2 text-sm font-medium">
+          {description}
+        </p>
+      )}
+
+      <div className="mt-6 flex w-full max-w-md flex-col justify-center gap-4 sm:flex-row">
+        {actions.map((action, index) => (
+          <Button
+            key={index}
+            className={actions.length > 1 ? "flex-1" : "w-auto"}
+            variant={action.variant}
+            onClick={action.onClick}
+          >
+            {action.label}
+          </Button>
+        ))}
       </div>
     </div>
   );
