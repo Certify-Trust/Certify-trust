@@ -46,7 +46,7 @@ const OverviewScreen = () => {
             {
               icon: <Shield />,
               label: "Create a Badge Design",
-              onClick: () => console.log("New Invoice"),
+              onClick: () => push("/dashboard/designs"),
             },
             {
               icon: <Trophy />,
