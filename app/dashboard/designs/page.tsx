@@ -1,5 +1,7 @@
+import DesignsScreen from "@/screens/designs";
+
 const DesignsPage = () => {
-  return <div className="flex h-125 items-center justify-center">Designs</div>;
+  return <DesignsScreen />;
 };
 
 export default DesignsPage;

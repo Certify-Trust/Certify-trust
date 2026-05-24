@@ -21,7 +21,7 @@ const OverviewScreen = () => {
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
         <div>
-          <h1 className="flex items-center text-2xl font-bold text-[#101828]">
+          <h1 className="flex items-center text-2xl font-semibold text-[#101828]">
             Welcome, Sandra! <span className="ml-2">👋</span>
           </h1>
 
