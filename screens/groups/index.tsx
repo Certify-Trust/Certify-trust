@@ -17,7 +17,7 @@ const GroupsScreen = () => {
           </h1>
         </div>
 
-        <Button>Create Group</Button>
+        <Button className="h-10.75">Create Group</Button>
       </div>
 
       <DashboardFilter />

@@ -17,7 +17,7 @@ const OverviewScreen = () => {
   const { push } = useRouter();
 
   return (
-    <div className="space-y-10">
+    <div className="min-h-screen space-y-5">
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
         <div>
@@ -32,7 +32,7 @@ const OverviewScreen = () => {
 
         <ActionsDropdown
           trigger={
-            <Button className="flex h-11 items-center gap-2 rounded-md px-5 font-semibold">
+            <Button className="flex h-10.75 items-center gap-2 rounded-md px-5 font-semibold">
               <PlusIcon />
               Quick Create
             </Button>

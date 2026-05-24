@@ -21,7 +21,7 @@ const DesignsScreen = () => {
 
         <ActionsDropdown
           trigger={
-            <Button className="flex h-11 items-center gap-2 rounded-md px-5 font-semibold">
+            <Button className="flex h-[43px] items-center gap-2 px-5 font-semibold">
               Create New
               <ChevronDown size={18} />
             </Button>
