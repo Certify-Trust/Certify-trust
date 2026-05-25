@@ -1,7 +1,5 @@
 import GroupsScreen from "@/screens/groups";
 
-const GroupsPage = () => {
+export default function GroupsPage() {
   return <GroupsScreen />;
-};
-
-export default GroupsPage;
+}

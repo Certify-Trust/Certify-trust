@@ -7,6 +7,9 @@ import EmptyStateIcon from "@/assets/icons/EmptyStateIcon";
 
 const GroupsScreen = () => {
   const { push } = useRouter();
+  const handleCreateGroup = () => {
+    push("/dashboard/groups/create");
+  };
   return (
     <div className="min-h-screen space-y-5">
       {/* Header */}
@@ -17,7 +20,10 @@ const GroupsScreen = () => {
           </h1>
         </div>
 
-        <Button className="h-10.75">Create Group</Button>
+       
+        <Button className="h-10.75" onClick={handleCreateGroup}>
+          Create Group
+        </Button>
       </div>
 
       <DashboardFilter />
@@ -29,7 +35,7 @@ const GroupsScreen = () => {
           actions={[
             {
               label: "Create Group",
-              onClick: () => console.log("Group"),
+              onClick: handleCreateGroup,
             },
           ]}
         />
