@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useForm, FormProvider } from "react-hook-form";
 import { Plus, Search, AlertCircle, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import RichTextEditor from "@/components/RichTextEditor";
 import EarningCriteriaSection from "@/components/EarningCriteria";
+import CustomInput from "@/components/custom-input/custom-input";
 
 const AppearanceCard = ({ type }: { type: "certificate" | "badge" }) => (
   <div className="relative flex h-[333px] w-[327px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-[#D0D5DD] bg-[#F9FAFB] transition hover:border-[#7F56D9]">
@@ -36,6 +37,7 @@ const AppearanceCard = ({ type }: { type: "certificate" | "badge" }) => (
 );
 
 const InfoAndAppearance = () => {
+  const methods = useForm();
   const [skills, setSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
   const [description, setDescription] = useState("");
@@ -46,8 +48,8 @@ const InfoAndAppearance = () => {
       setSkillInput("");
     }
   };
-
   return (
+    <FormProvider {...methods}>
     <div className="space-y-10 pb-10">
       {/* Group Information */}
       <section className="space-y-5">
@@ -56,21 +58,18 @@ const InfoAndAppearance = () => {
           <p className="text-sm text-[#667085]">Set up the details for your group</p>
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[#344054]">Display Name</label>
-          <Input className="h-11 border-gray-300" />
+        <div>
+          <CustomInput id="display-name" type="text" label="Display Name" inputClass="w-full" />
           <p className="text-xs text-[#667085]">Display on and below certificates</p>
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[#344054]">Identifier</label>
-          <Input className="h-11 border-gray-300" />
+        <div>
+          <CustomInput id="identifier" type="text" label="Identifier" inputClass="w-full" />
           <p className="text-xs text-[#667085]">To identify your group on the dashboard - ex. a business training</p>
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[#344054]">Course Website</label>
-          <Input className="h-11 border-gray-300" />
+        <div>
+          <CustomInput id="course-website" type="text" label="Course Website" inputClass="w-full" />
           <p className="text-xs text-[#667085]">This connects the credential data record to the details about the credential on your site.</p>
         </div>
 
@@ -139,6 +138,7 @@ const InfoAndAppearance = () => {
 
       <Button className="py-2 px-12">Save</Button>
     </div>
+    </FormProvider>
   );
 };
 

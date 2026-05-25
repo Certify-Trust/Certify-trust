@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import RichTextEditor from "@/components/RichTextEditor";
 import { ExternalLink } from "lucide-react";
 import RecipientSupport from "./RecipientSupport";
 import MarketMyCourses from "./MarketmyCourses";
 import BrandSettings from "./BrandSettings";
+import CustomInput from "@/components/custom-input/custom-input";
+import { useForm, FormProvider } from "react-hook-form";
 
 const TABS = ["General Settings", "Brand Settings", "Recipient Support", "Market My Courses"] as const;
 type Tab = (typeof TABS)[number];
@@ -16,48 +17,50 @@ type Tab = (typeof TABS)[number];
 // ─── General Information ──────────────────────────────────────────────────────
 
 const GeneralInformation = () => {
+  const methods = useForm();
   const [description, setDescription] = useState("");
 
   return (
-    <section className="space-y-5 border p-4 border-gray-300 rounded-lg">
-      <div>
-        <h2 className="text-base font-semibold text-[#101828]">General Information</h2>
-        <p className="text-sm text-[#667085]">Set up the details for general information</p>
-      </div>
+    <FormProvider {...methods}>
+      <section className="space-y-5 border p-4 border-gray-300 rounded-lg">
+        <div>
+          <h2 className="text-base font-semibold text-[#101828]">General Information</h2>
+          <p className="text-sm text-[#667085]">Set up the details for general information</p>
+        </div>
 
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium text-[#344054]">Issuer Name</label>
-        <Input className="h-11 border-gray-300" />
-        <p className="text-xs text-[#667085]">Name of the credential issuer displayed on credential</p>
-      </div>
+        <div>
+          <CustomInput id="issuer-name" type="text" label="Issuer Name" inputClass="w-full" />
+          <p className="text-xs text-[#667085]">Name of the credential issuer displayed on credential</p>
+        </div>
 
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium text-[#344054]">Website</label>
-        <Input className="h-11 border-gray-300" />
-        <p className="text-xs text-[#667085]">Website for your organization</p>
-      </div>
+        <div>
+          <CustomInput id="website" type="text" label="Website" inputClass="w-full" />
+          <p className="text-xs text-[#667085]">Website for your organization</p>
+        </div>
 
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium text-[#344054]">Default Category</label>
-        <select className="h-11 w-full rounded-lg border border-[#D0D5DD] bg-white px-3 text-sm text-[#344054] focus:outline-none">
-          <option value=""></option>
-        </select>
-      </div>
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-[#344054]">Default Category</label>
+          <select className="h-11 w-full rounded-lg border border-[#D0D5DD] bg-white px-3 text-sm text-[#344054] focus:outline-none">
+            <option value=""></option>
+          </select>
+        </div>
 
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium text-[#344054]">Description</label>
-        <p className="text-xs text-[#667085]">A description for your organization</p>
-        <RichTextEditor value={description} onChange={setDescription} placeholder="Type description here." rows={4} />
-      </div>
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-[#344054]">Description</label>
+          <p className="text-xs text-[#667085]">A description for your organization</p>
+          <RichTextEditor value={description} onChange={setDescription} placeholder="Type description here." rows={4} />
+        </div>
 
-      <Button className="h-10 px-8 text-white hover:bg-[#6941C6]">Save</Button>
-    </section>
+        <Button className="h-10 px-8 text-white hover:bg-[#6941C6]">Save</Button>
+      </section>
+    </FormProvider>
   );
 };
 
 // ─── Social Media Accounts ────────────────────────────────────────────────────
 
 const SocialMediaAccounts = () => {
+  const methods = useForm();
   const fields = [
     "LinkedIn Org. ID",
     "LinkedIn URL",
@@ -69,25 +72,30 @@ const SocialMediaAccounts = () => {
   ];
 
   return (
-    <section className="space-y-5 border p-4 border-gray-300 rounded-lg">
-      <div>
-        <h2 className="text-base font-semibold text-[#101828]">Social Media Accounts</h2>
-        <p className="text-sm mt-2 text-[#667085]">Link your social channels to your issuer page</p>
-      </div>
-
-      {fields.map((field) => (
-        <div key={field} className="space-y-1.5">
-          <label className="text-sm font-medium text-[#344054]">{field}</label>
-          <Input className="h-11 border-gray-300" />
+    <FormProvider {...methods}>
+      <section className="space-y-5 border p-4 border-gray-300 rounded-lg">
+        <div>
+          <h2 className="text-base font-semibold text-[#101828]">Social Media Accounts</h2>
+          <p className="text-sm mt-2 text-[#667085]">Link your social channels to your issuer page</p>
         </div>
-      ))}
+
+        {fields.map((field) => (
+          <CustomInput
+            key={field}
+            id={field.toLowerCase().replace(/\s/g, "-")}
+            type="text"
+            label={field}
+            inputClass="w-full"
+          />
+        ))}
 
         <Button className="h-10 px-8 text-white hover:bg-[#6941C6]">Save</Button>
-    </section>
+      </section>
+    </FormProvider>
   );
 };
 
-
+// ─── API Settings ─────────────────────────────────────────────────────────────
 
 const ApiSettings = () => {
   const [autoPublish, setAutoPublish] = useState(true);
@@ -144,16 +152,15 @@ const ApiSettings = () => {
   );
 };
 
+// ─── Main Screen ──────────────────────────────────────────────────────────────
 
 const GeneralSettingsScreen = () => {
   const [activeTab, setActiveTab] = useState<Tab>("General Settings");
 
   return (
     <div className="min-h-screen space-y-5">
-      {/* Header */}
       <h1 className="text-2xl font-semibold text-[#101828]">General Settings</h1>
 
-      {/* Tabs */}
       <div className="border-b border-[#EAECF0]">
         <nav className="flex w-fit gap-6">
           {TABS.map((tab) => (
@@ -173,20 +180,16 @@ const GeneralSettingsScreen = () => {
         </nav>
       </div>
 
-     {/* Tab Content */}
-{activeTab === "General Settings" && (
-  <div className="space-y-10 pb-10">
-    <GeneralInformation />
-    <SocialMediaAccounts />
-    <ApiSettings />
-  </div>
-)}
-{activeTab === "Brand Settings" && <BrandSettings />}
-{activeTab === "Recipient Support" && <RecipientSupport />}
-{activeTab === "Market My Courses" && <MarketMyCourses />}
-     
-
-
+      {activeTab === "General Settings" && (
+        <div className="space-y-10 pb-10">
+          <GeneralInformation />
+          <SocialMediaAccounts />
+          <ApiSettings />
+        </div>
+      )}
+      {activeTab === "Brand Settings" && <BrandSettings />}
+      {activeTab === "Recipient Support" && <RecipientSupport />}
+      {activeTab === "Market My Courses" && <MarketMyCourses />}
     </div>
   );
 };

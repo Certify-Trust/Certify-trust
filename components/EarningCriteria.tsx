@@ -5,6 +5,8 @@ import { Plus, Trash2 } from "lucide-react";
 import RichTextEditor from "@/components/RichTextEditor";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { FormProvider, useForm } from "react-hook-form";
+import CustomInput from "./custom-input/custom-input";
 
 interface EarningCriteria {
   id: string;
@@ -14,6 +16,7 @@ interface EarningCriteria {
 }
 
 const EarningCriteriaSection = () => {
+    const methods = useForm();
   const [criteria, setCriteria] = useState<EarningCriteria[]>([
     { id: "1", type: "", required: false, description: "" },
   ]);
@@ -31,6 +34,7 @@ const EarningCriteriaSection = () => {
     setCriteria((prev) => prev.map((c) => (c.id === id ? { ...c, [field]: value } : c)));
 
   return (
+      <FormProvider {...methods}>
     <section className="space-y-5 border p-4 border-gray-300 rounded-lg">
       <div>
         <h2 className="text-base font-semibold text-[#101828]">
@@ -58,15 +62,12 @@ const EarningCriteriaSection = () => {
       <option value="project">Project</option>
     </select>
 
-    <label className="flex items-center gap-2 text-sm text-[#344054]">
-      <input
-        type="checkbox"
-        checked={c.required}
-        onChange={(e) => updateCriteria(c.id, "required", e.target.checked)}
-        className="h-4 w-4 rounded border-[#D0D5DD] accent-[#7F56D9]"
-      />
-      Set as required
-    </label>
+ <CustomInput
+  id={`required-${c.id}`}
+  type="checkbox"
+  options={[{ id: `required-${c.id}`, value: "required", label: "Set as required" }]}
+  inputClass="h-4 w-4 accent-[#7F56D9]"
+/>
   </div>
 
   <button
@@ -96,6 +97,7 @@ const EarningCriteriaSection = () => {
         </Button>
       </div>
     </section>
+    </FormProvider>
   );
 };
 
