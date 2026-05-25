@@ -9,7 +9,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import avatar from "@/public/auth/signup.svg";
-import { ArrowLeft } from "lucide-react";
 import GoBackButton from "@/components/back-button";
 import { year } from "@/constants/date";
 import SignupLayer from "@/components/layers/SignupLayer";
