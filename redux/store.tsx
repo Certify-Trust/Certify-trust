@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./reducers/authSlice";
 import designsReducer from "./reducers/designSlice";
+import signUpEmail from "./reducers/email";
 
 import { persistStore, persistReducer } from "redux-persist";
 
@@ -9,12 +10,13 @@ import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({
   auth: authReducer,
   designs: designsReducer,
+  signUpEmail: signUpEmail,
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: [""],
+  whitelist: ["auth", "signUpEmail"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

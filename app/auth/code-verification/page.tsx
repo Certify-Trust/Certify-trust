@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import GoBackButton from "@/components/back-button";
@@ -12,9 +12,21 @@ import SignupLayer from "@/components/layers/SignupLayer";
 import loginImage from "@/public/auth/login.svg";
 
 import { year } from "@/constants/date";
+import { useResendIssuerOTP, useVerifyIssuer } from "@/hooks/useAuth";
+import { Loader } from "lucide-react";
+import { toast } from "sonner";
+import { handleApiError } from "@/lib/errorHelper";
+import useAppSelector from "@/hooks/useAppSelector";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import { setSignUpEmail } from "@/redux/reducers/email";
 
 const CodeVerification = () => {
+  const [cooldown, setCooldown] = useState(0);
   const { push } = useRouter();
+  const dispatch = useAppDispatch();
+  const { mutate, isPending: verifying } = useVerifyIssuer();
+  const { mutate: resend, isPending: resending } = useResendIssuerOTP();
+  const email = useAppSelector((state) => state.signUpEmail.signUpEmail);
 
   const [otp, setOtp] = useState(["", "", "", "", ""]);
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
@@ -76,12 +88,56 @@ const CodeVerification = () => {
 
   const isComplete = otp.every((digit) => digit !== "");
 
+  useEffect(() => {
+    if (cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldown]);
+
   const handleSubmit = () => {
     const code = otp.join("");
 
-    console.log("OTP:", code);
+    mutate(
+      { code },
+      {
+        onSuccess: (response) => {
+          toast.success(response?.message || " success");
+          dispatch(setSignUpEmail(null));
+          // push("/auth/login");
+          // push("/dashboard/overview");
+        },
+        onError: handleApiError,
+      },
+    );
+  };
 
-    push("/dashboard/overview");
+  const resendCode = () => {
+    if (!email) {
+      toast.error("Email not found. Please restart signup.");
+      return;
+    }
+
+    resend(
+      { email },
+      {
+        onSuccess: (response) => {
+          toast.success(response?.message || "OTP sent successfully");
+
+          setCooldown(20);
+        },
+        onError: handleApiError,
+      },
+    );
   };
 
   return (
@@ -146,21 +202,27 @@ const CodeVerification = () => {
             {/* Buttons */}
             <div className="mt-14 flex flex-col gap-4 min-[709px]:flex-row">
               <Button
+                onClick={resendCode}
+                disabled={resending || cooldown > 0}
                 variant="ghost"
                 size="full"
-                className="flex-1 font-semibold text-gray-700"
+                className="flex flex-1 items-center gap-2 font-semibold text-gray-700"
               >
-                Resend Code
+                {resending && <Loader className="h-4 w-4 animate-spin" />}
+                <span>
+                  {cooldown > 0 ? `Resend in ${cooldown}s` : "Resend Code"}
+                </span>
               </Button>
 
               <Button
                 type="button"
                 size="full"
-                className="flex-1"
-                disabled={!isComplete}
+                className="flex flex-1 items-center gap-2"
+                disabled={!isComplete || verifying}
                 onClick={handleSubmit}
               >
-                Verify Email
+                {verifying && <Loader className="h-4 w-4 animate-spin" />}
+                <span> Verify Email</span>
               </Button>
             </div>
           </div>

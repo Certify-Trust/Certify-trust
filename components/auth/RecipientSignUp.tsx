@@ -23,9 +23,9 @@ interface RecipientSignUpProps {
 
 const schema = z
   .object({
-    firstName: z.string().min(1, "First name is required"),
+    first_name: z.string().min(1, "First name is required"),
 
-    lastName: z.string().min(1, "Last name is required"),
+    last_name: z.string().min(1, "Last name is required"),
 
     phone: z.string().min(6, "Phone number must be at least 6 digits"),
 
@@ -98,23 +98,23 @@ const RecipientSignUp = ({ fromIssuer = false }: RecipientSignUpProps) => {
               <form onSubmit={handleSubmit(onSubmit)} className="">
                 <div className="grid gap-x-5 min-[830px]:grid-cols-2">
                   <CustomInput
-                    name="firstName"
-                    id="firstName"
+                    name="first_name"
+                    id="first_name"
                     label="First Name"
                     type="text"
                     labelClass="text-gray-700"
                     placeholder="Enter your First Name"
-                    // error={errors.firstName?.message ? String(errors.firstName.message) : undefined}
+                    // error={errors.first_name?.message ? String(errors.first_name.message) : undefined}
                   />
 
                   <CustomInput
-                    name="lastName"
-                    id="lastName"
+                    name="last_name"
+                    id="last_name"
                     label="Last Name"
                     type="text"
                     labelClass="text-gray-700"
                     placeholder="Enter your Last Name"
-                    // error={errors.lastName?.message ? String(errors.lastName.message) : undefined}
+                    // error={errors.last_name?.message ? String(errors.last_name.message) : undefined}
                   />
                 </div>
 

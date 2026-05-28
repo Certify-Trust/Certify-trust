@@ -17,22 +17,27 @@ import useAppSelector from "@/hooks/useAppSelector";
 import RecipientSignUp from "@/components/auth/RecipientSignUp";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import { setSelectedRole } from "@/redux/reducers/authSlice";
+import { Loader } from "lucide-react";
+import { useRegisterIssuer } from "@/hooks/useAuth";
+import { toast } from "sonner";
+import { handleApiError } from "@/lib/errorHelper";
+import { setSignUpEmail } from "@/redux/reducers/email";
 
 const schema = z
   .object({
-    firstName: z.string().min(1, "First name is required"),
+    first_name: z.string().min(1, "First name is required"),
 
-    lastName: z.string().min(1, "Last name is required"),
+    last_name: z.string().min(1, "Last name is required"),
 
     phone: z.string().min(6, "Phone number must be at least 6 digits"),
 
     email: z.string().email("Invalid email").trim().toLowerCase(),
 
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
 
     confirmPassword: z
       .string()
-      .min(6, "Password must be at least 6 characters"),
+      .min(8, "Password must be at least 8 characters"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -55,10 +60,22 @@ const SignupScreen = () => {
     formState: { errors, isValid },
   } = methods;
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const { mutate, isPending } = useRegisterIssuer();
 
-    push("/auth/verify-email");
+  const onSubmit = (data: FormData) => {
+    const { confirmPassword, ...payload } = data;
+
+    mutate(payload, {
+      onSuccess: (response) => {
+        toast.success(response?.message || "Account created successfully");
+
+        dispatch(setSignUpEmail(payload.email));
+        push("/auth/code-verification");
+        // push("/auth/verify-email");
+      },
+
+      onError: handleApiError,
+    });
   };
   return selectedRole === "issuer" ? (
     <div className="flex min-h-screen">
@@ -80,23 +97,23 @@ const SignupScreen = () => {
               <form onSubmit={handleSubmit(onSubmit)} className="">
                 <div className="grid gap-x-5 min-[830px]:grid-cols-2">
                   <CustomInput
-                    name="firstName"
-                    id="firstName"
+                    name="first_name"
+                    id="first_name"
                     label="First Name"
                     type="text"
                     labelClass="text-gray-700"
                     placeholder="Enter your First Name"
-                    // error={errors.firstName?.message ? String(errors.firstName.message) : undefined}
+                    // error={errors.first_name?.message ? String(errors.first_name.message) : undefined}
                   />
 
                   <CustomInput
-                    name="lastName"
-                    id="lastName"
+                    name="last_name"
+                    id="last_name"
                     label="Last Name"
                     type="text"
                     labelClass="text-gray-700"
                     placeholder="Enter your Last Name"
-                    // error={errors.lastName?.message ? String(errors.lastName.message) : undefined}
+                    // error={errors.last_name?.message ? String(errors.last_name.message) : undefined}
                   />
                 </div>
 
@@ -168,16 +185,12 @@ const SignupScreen = () => {
                   type="submit"
                   size="full"
                   className=""
-                  disabled={!isValid}
+                  disabled={!isValid || isPending}
                 >
-                  Sign Up
-                  {/* {isLoading ? (
-              <div>
-                <PacmanLoader color="white" size={10} />
-              </div>
-            ) : (
-              'Log in'
-            )} */}
+                  <div className="flex items-center gap-2">
+                    {isPending && <Loader className="h-4 w-4 animate-spin" />}
+                    <span>Sign Up</span>
+                  </div>
                 </Button>
               </form>
             </FormProvider>
