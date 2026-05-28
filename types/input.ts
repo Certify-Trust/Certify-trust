@@ -15,6 +15,7 @@ export interface CustomInputProps {
   label?: string;
   labelClass?: string;
   type:
+    | React.HTMLInputTypeAttribute
     | "text"
     | "number"
     | "select"
@@ -38,4 +39,30 @@ export interface CustomInputProps {
   error?: string;
 
   onChange?: (e: React.ChangeEvent<InputElement>) => void;
+}
+
+export type Screen = "intro" | 1 | 2 | 3 | "success";
+
+export interface OrgDetails {
+  corporateLegalName: string;
+  corporateAddress: string;
+  country: string;
+  yearFounded: string;
+  numberOfEmployees: string;
+  idType: string;
+  registrationId: string;
+}
+
+export interface OrgProfile {
+  organisationDescription: string;
+  corporateWebsiteUrl: string;
+  organisationLinkedinUrl: string;
+  logoUrl: string;
+}
+
+export interface ContactInfo {
+  businessContactEmail: string;
+  corporateSignatoryFullName: string;
+  corporateSignatoryEmail: string;
+  corporateSignatoryTitle: string;
 }

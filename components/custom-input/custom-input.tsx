@@ -57,7 +57,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
             id={id}
             {...registerField}
             className={twMerge(
-              "text-grey-500 my-2 rounded-md border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
+              "text-grey-500 my-2 w-full rounded-sm border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
               inputClass,
             )}
             onChange={onChange}
@@ -83,7 +83,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
             {...registerField}
             placeholder={placeholder}
             className={twMerge(
-              "my-2 rounded-md border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
+              "my-2 w-full rounded-sm border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
               inputClass,
             )}
             disabled={disabled}
@@ -159,7 +159,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
       ) : (
         <div
           className={twMerge(
-            "relative my-2 h-10 w-full rounded-[1px] border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
+            "relative my-2 h-10 w-full rounded-sm border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:outline-none",
             wrapperClassName,
           )}
         >
@@ -169,7 +169,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
             {...registerField}
             placeholder={placeholder}
             className={twMerge(
-              "accent-blueDark-800 h-[38px] w-full rounded-[1px] px-3 text-gray-600 placeholder:text-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none",
+              "accent-blueDark-800 h-[38px] w-full rounded-sm px-3 text-gray-600 placeholder:text-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none",
               inputClass,
             )}
             disabled={disabled}
