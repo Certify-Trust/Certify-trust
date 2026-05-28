@@ -7,6 +7,7 @@ import Sidebar from "@/components/dashboard/sidebar";
 // import Records from '@/components/layout/dashboardNav/records';
 // import Navbar from '@/components/layout/dashboardNav/sidebar';
 import React from "react";
+import { CredentialsProvider } from "@/context/CredentialsContext";
 
 interface DashLayoutProps {
   children: React.ReactNode;
@@ -23,7 +24,9 @@ export default function DashboardLayout({ children }: DashLayoutProps) {
           <DashboardHeader />
           <div className="custom-scrollbar flex overflow-y-scroll">
             <div className="mt-8 mr-2 ml-4 flex-1 pb-7 sm:mr-5 md:mr-6 lg:ml-7.5">
-              {children}
+               <CredentialsProvider>
+                {children}
+              </CredentialsProvider>
             </div>
           </div>
         </div>

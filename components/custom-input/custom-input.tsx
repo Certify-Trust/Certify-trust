@@ -12,6 +12,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   label,
   type,
   onChange,
+  value,
   labelClass = "text-sm font-normal text-gray-700",
   field = {},
   wrapperClassName,
@@ -163,17 +164,19 @@ const CustomInput: React.FC<CustomInputProps> = ({
             wrapperClassName,
           )}
         >
-          <input
-            type={showPassword ? "text" : type}
-            id={id}
-            {...registerField}
-            placeholder={placeholder}
-            className={twMerge(
-              "accent-blueDark-800 h-[38px] w-full rounded-[1px] px-3 text-gray-600 placeholder:text-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none",
-              inputClass,
-            )}
-            disabled={disabled}
-          />
+         <input
+  type={showPassword ? "text" : type}
+  id={id}
+  placeholder={placeholder}
+  className={twMerge(
+    "accent-blueDark-800 h-[38px] w-full rounded-[1px] px-3 text-gray-600 placeholder:text-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none",
+    inputClass,
+  )}
+  disabled={disabled}
+  {...registerField}
+  {...(value !== undefined && { value })}
+  {...(onChange && { onChange })}
+/>
           {type === "password" && (
             <button
               type="button"

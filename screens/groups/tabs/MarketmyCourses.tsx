@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useGroupForm } from "@/context/GroupFormContext";
 
 const MarketMyCourses = () => {
-  const [supportType, setSupportType] = useState<"email" | "helpdesk">("email");
+  const { formData, updateFormData } = useGroupForm();
 
   return (
     <div className="rounded-lg border border-[#EAECF0] p-6 space-y-5">
@@ -17,10 +17,10 @@ const MarketMyCourses = () => {
         <label className="flex items-center gap-2 text-sm text-[#344054] cursor-pointer">
           <input
             type="radio"
-            name="supportType"
+            name="marketSupportType"
             value="email"
-            checked={supportType === "email"}
-            onChange={() => setSupportType("email")}
+            checked={formData.marketSupportType === "email"}
+            onChange={() => updateFormData({ marketSupportType: "email" })}
             className="h-4 w-4 accent-[#7F56D9]"
           />
           Email your Support Contact
@@ -29,10 +29,10 @@ const MarketMyCourses = () => {
         <label className="flex items-center gap-2 text-sm text-[#344054] cursor-pointer">
           <input
             type="radio"
-            name="supportType"
+            name="marketSupportType"
             value="helpdesk"
-            checked={supportType === "helpdesk"}
-            onChange={() => setSupportType("helpdesk")}
+            checked={formData.marketSupportType === "helpdesk"}
+            onChange={() => updateFormData({ marketSupportType: "helpdesk" })}
             className="h-4 w-4 accent-[#7F56D9]"
           />
           Helpdesk Form

@@ -14,6 +14,7 @@ export interface CustomInputProps {
   placeholder?: string;
   label?: string;
   labelClass?: string;
+  value?: string;
   type:
     | "text"
     | "number"
