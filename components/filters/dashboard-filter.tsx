@@ -14,9 +14,9 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-const collections = ["All Collections", "2024 Collections", "2025 Collections"];
+const collections = ["Any type", "Badge", "Certificate"];
 
-const appearances = ["All Appearances", "Dark", "Light", "System"];
+const appearances = ["Both", "In use", "Not in use"];
 
 export default function FilterBar() {
   const [search, setSearch] = useState("");
@@ -77,7 +77,7 @@ export default function FilterBar() {
             {hasActiveFilters && (
               <button
                 onClick={resetFilters}
-                className="text-xs text-gray-400 transition hover:text-gray-600"
+                className="cursor-pointer text-xs text-gray-400 transition hover:text-gray-600"
               >
                 Reset
               </button>

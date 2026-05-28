@@ -4,11 +4,14 @@ import EmptyStateIcon from "@/assets/icons/EmptyStateIcon";
 import { ActionsDropdown } from "@/components/dropdown/ActionsDropDown";
 import EmptyState from "@/components/empty";
 import DashboardFilter from "@/components/filters/dashboard-filter";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 
 const DesignsScreen = () => {
+  const { push } = useRouter();
+
   return (
     <div className="min-h-screen space-y-5">
       {/* Header */}
@@ -21,7 +24,7 @@ const DesignsScreen = () => {
 
         <ActionsDropdown
           trigger={
-            <Button className="flex h-[43px] items-center gap-2 px-5 font-semibold">
+            <Button className="flex h-10.75 items-center gap-2 px-5 font-semibold">
               Create New
               <ChevronDown size={18} />
             </Button>
@@ -29,11 +32,11 @@ const DesignsScreen = () => {
           items={[
             {
               label: "New Certificate Design",
-              onClick: () => console.log("object"),
+              onClick: () => push("/dashboard/designs/create"),
             },
             {
               label: "New Badge Design",
-              onClick: () => console.log("New Invoice"),
+              onClick: () => push("/dashboard/designs/create"),
             },
           ]}
         />
@@ -48,12 +51,12 @@ const DesignsScreen = () => {
           actions={[
             {
               label: "Create Badge Design",
-              onClick: () => console.log("badge"),
+              onClick: () => push("/dashboard/designs/create"),
               variant: "pricing",
             },
             {
               label: "Create Certificate Design",
-              onClick: () => console.log("certificate"),
+              onClick: () => push("/dashboard/designs/create"),
             },
           ]}
         />

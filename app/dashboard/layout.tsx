@@ -1,28 +1,34 @@
 "use client";
+
 import DashboardHeader from "@/components/dashboard/header";
 import Sidebar from "@/components/dashboard/sidebar";
-// import CalendarSchedule from '@/components/layout/dashboardNav/calendar';
-// import Header from '@/components/layout/dashboardNav/header';
-// import PopularPost from '@/components/layout/dashboardNav/popularPost';
-// import Records from '@/components/layout/dashboardNav/records';
-// import Navbar from '@/components/layout/dashboardNav/sidebar';
-import React from "react";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
-interface DashLayoutProps {
+export default function DashboardLayout({
+  children,
+}: {
   children: React.ReactNode;
-}
+}) {
+  const pathname = usePathname();
 
-export default function DashboardLayout({ children }: DashLayoutProps) {
+  const hideLayout = pathname === "/dashboard/designs/create";
+
   return (
     <main>
       <div className="flex min-h-screen">
-        <div>
-          <Sidebar />
-        </div>
+        {!hideLayout && <Sidebar />}
+
         <div className="w-full bg-white">
-          <DashboardHeader />
+          {!hideLayout && <DashboardHeader />}
+
           <div className="custom-scrollbar flex overflow-y-scroll">
-            <div className="mt-8 mr-2 ml-4 flex-1 pb-7 sm:mr-5 md:mr-6 lg:ml-7.5">
+            <div
+              className={cn(
+                "flex-1",
+                !hideLayout && "mt-8 mr-2 ml-4 pb-7 sm:mr-5 md:mr-6 lg:ml-7.5",
+              )}
+            >
               {children}
             </div>
           </div>
