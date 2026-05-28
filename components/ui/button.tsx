@@ -22,7 +22,7 @@ const buttonVariants = cva(
         ghost:
           "border border-grey-200 text-black hover:bg-accent hover:text-accent-foreground",
         pricing:
-          "border border-[#D0D5DD] hover:bg-[#F5F8FF] text-black text-left hover:bg-accent hover:text-accent-foreground active:border-blueDark-400 active:border-blueDark-800",
+          "border border-[#D0D5DD] hover:bg-gray-50/70 text-black text-left shadow-sm shadow-[#1018280D]",
         link: "text-primary underline-offset-4 hover:underline",
         muted: "",
         content:

@@ -74,13 +74,13 @@ const RecipientSignUp = ({ fromIssuer = false }: RecipientSignUpProps) => {
 
       <div className="w-full px-4 py-8 sm:w-1/2 sm:p-8">
         <GoBackButton
-          onClick={() => {
-            if (fromIssuer) {
-              dispatch(setSelectedRole("issuer"));
-            } else {
-              back();
-            }
-          }}
+        // onClick={() => {
+        //   if (fromIssuer) {
+        //     dispatch(setSelectedRole("issuer"));
+        //   } else {
+        //     back();
+        //   }
+        // }}
         />
 
         <div className="flex h-full flex-col space-y-6">

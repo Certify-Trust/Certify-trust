@@ -122,7 +122,7 @@ const CodeVerification = () => {
             </div>
 
             {/* OTP Inputs */}
-            <div className="mb-10 flex items-center justify-center gap-3 sm:gap-5">
+            <div className="flex items-center justify-center gap-3 sm:gap-5">
               {otp.map((digit, index) => (
                 <input
                   key={index}

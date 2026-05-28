@@ -180,7 +180,7 @@ function ProfileMenu() {
     {
       type: "link",
       label: "Issuer Verification",
-      href: "#",
+      href: "/dashboard/verification",
       icon: icons.issuerVerification,
       onClickExtra: close,
     },
