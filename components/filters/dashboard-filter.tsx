@@ -180,12 +180,12 @@ function CollectionDropdown({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="start" className="w-45">
+      <DropdownMenuContent align="start" className="w-45 bg-white">
         {collections.map((item) => (
           <DropdownMenuItem
             key={item}
             onSelect={() => onSelect(item)}
-            className="cursor-pointer bg-white text-sm"
+            className="cursor-pointer text-sm"
           >
             {item}
           </DropdownMenuItem>
@@ -213,12 +213,12 @@ function AppearanceDropdown({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="start" className="w-45">
+      <DropdownMenuContent align="start" className="w-45 bg-white">
         {appearances.map((item) => (
           <DropdownMenuItem
             key={item}
             onSelect={() => onSelect(item)}
-            className="cursor-pointer bg-white text-sm"
+            className="cursor-pointer text-sm"
           >
             {item}
           </DropdownMenuItem>

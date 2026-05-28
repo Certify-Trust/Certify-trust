@@ -7,6 +7,9 @@ import { SideTab, Template } from "@/types/editor";
 import { TEMPLATES } from "@/constants/editor";
 import CanvasArea, { CanvasAreaHandle } from "@/components/canvas/CanvasArea";
 import { Icon, icons } from "@/components/canvas/Icons";
+import { useRouter } from "next/navigation";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import { addDesign } from "@/redux/reducers/designSlice";
 
 // ─── Template thumbnail
 const TemplateThumb = ({
@@ -50,11 +53,27 @@ const TemplateThumb = ({
 
 // ─── Main Component
 const CreateDesigns: React.FC = () => {
+  const { back } = useRouter();
+  const dispatch = useAppDispatch();
   const canvasAreaRef = useRef<CanvasAreaHandle | null>(null);
 
   const [activeTab, setActiveTab] = useState<SideTab>("templates");
   const [hasUnsaved, setHasUnsaved] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+
+  const handleSave = () => {
+    dispatch(
+      addDesign({
+        id: Date.now(),
+        name: "Untitled",
+        createdAt: new Date().toISOString(),
+      }),
+    );
+
+    setHasUnsaved(false);
+
+    back();
+  };
 
   const navItems: { tab: SideTab; icon: keyof typeof icons; label: string }[] =
     [
@@ -202,7 +221,10 @@ const CreateDesigns: React.FC = () => {
     >
       {/* ── Top Bar ── */}
       <header className="flex h-[52px] flex-shrink-0 items-center justify-between gap-2 bg-[#5324FB] px-3 sm:px-6">
-        <button className="flex flex-shrink-0 cursor-pointer items-center gap-1.5 text-sm text-white transition-colors hover:text-white/80">
+        <button
+          onClick={() => back()}
+          className="flex flex-shrink-0 cursor-pointer items-center gap-1.5 text-sm text-white transition-colors hover:text-white/80"
+        >
           <Icon d={icons.chevronLeft} size={16} />
           <span className="hidden sm:inline">Close</span>
         </button>
@@ -229,7 +251,7 @@ const CreateDesigns: React.FC = () => {
             />
           )}
           <button
-            onClick={() => setHasUnsaved(false)}
+            onClick={handleSave}
             className="cursor-pointer rounded border border-white bg-[#6C45FF] px-2.5 py-1.5 text-xs font-semibold transition-colors hover:bg-[#6C45FF]/60 sm:px-3.5 sm:py-2"
           >
             <span className="hidden sm:inline">Save and Close</span>
