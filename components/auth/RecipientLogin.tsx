@@ -16,6 +16,12 @@ import { year } from "@/constants/date";
 import recipientIMG from "@/public/auth/recipientIMG.svg";
 import CustomTab from "../customTab";
 import { useRouter } from "next/navigation";
+import { useSignInRecipint } from "@/hooks/useAuth";
+import { toast } from "sonner";
+import { setUser } from "@/redux/reducers/userSlice";
+import { handleApiError } from "@/lib/errorHelper";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import { Loader } from "lucide-react";
 
 const getSchema = (activeTab: keyof typeof tabConfig) =>
   z
@@ -81,8 +87,10 @@ const fadeIn = {
 };
 
 const RecipientLogin = () => {
-  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { push } = useRouter();
   const [activeTab, setActiveTab] = useState<keyof typeof tabConfig>("tab1");
+  const { mutate, isPending } = useSignInRecipint();
 
   const { heading, subheading, submitLabel, showPassword } =
     tabConfig[activeTab];
@@ -98,9 +106,26 @@ const RecipientLogin = () => {
   } = methods;
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    mutate(data, {
+      onSuccess: (response) => {
+        const session = response.session;
 
-    router.push("/dashboard/overview");
+        if (!session) {
+          toast.error("Invalid login response");
+          return;
+        }
+        toast.success("Login successful");
+        dispatch(
+          setUser({
+            user: session.user,
+            accessToken: session.accessToken,
+          }),
+        );
+
+        push("/dashboard/overview");
+      },
+      onError: handleApiError,
+    });
   };
 
   return (
@@ -208,9 +233,10 @@ const RecipientLogin = () => {
                   <Button
                     type="submit"
                     size="full"
-                    className={`${!showPassword && "mt-5"}`}
+                    className={`${!showPassword && "mt-5"} flex items-center gap-2`}
                     disabled={!isValid}
                   >
+                    {isPending && <Loader className="h-4 w-4 animate-spin" />}
                     {submitLabel}
                   </Button>
                 </div>

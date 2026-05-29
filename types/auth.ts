@@ -2,7 +2,8 @@ import { AxiosError } from "axios";
 
 export type LoginPayload = {
   email: string;
-  password: string;
+  password?: string;
+  role?: string | null;
 };
 
 export type RegisterPayload = {

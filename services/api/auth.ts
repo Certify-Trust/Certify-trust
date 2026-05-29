@@ -12,7 +12,14 @@ class Auth_API {
     return await axiosService({
       method: "POST",
       data: userData,
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/issuer/login`,
+    });
+  }
+  static async loginRecipient(userData: LoginPayload): Promise<AuthResponse> {
+    return await axiosService({
+      method: "POST",
+      data: userData,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/authk/recipient/login`,
     });
   }
 

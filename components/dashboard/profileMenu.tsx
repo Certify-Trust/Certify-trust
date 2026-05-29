@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import { signOut } from "next-auth/react";
+import useAppSelector from "@/hooks/useAppSelector";
 
 const icons = {
   billing: (
@@ -155,6 +157,11 @@ function ProfileMenu() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef<HTMLUListElement | null>(null);
+  const user = useAppSelector((state) => state.user.user);
+
+  const initials = `${user?.firstName?.[0] ?? ""}${
+    user?.lastName?.[0] ?? ""
+  }`.toUpperCase();
 
   const close = () => setIsOpen(false);
 
@@ -216,8 +223,13 @@ function ProfileMenu() {
       type: "button",
       label: "Logout",
       icon: icons.logout,
-      onClick: () => {
-        /* handleLogout() */ close();
+      onClick: async () => {
+        close();
+
+        await signOut({
+          redirect: false,
+        });
+
         router.push("/");
       },
     },
@@ -232,7 +244,7 @@ function ProfileMenu() {
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
-        <span>S.K</span>
+        <span>{initials}</span>
       </div>
 
       {/* Dropdown */}
@@ -246,18 +258,20 @@ function ProfileMenu() {
                 aria-haspopup="true"
                 aria-expanded={isOpen}
               >
-                <span>S.K</span>
+                <span>{initials}</span>
               </div>
 
               <div>
-                <h3 className="font-medium">Christopher Sani</h3>
-                <p className="text-sm">sani.christopher@gmail.com</p>
+                <h3 className="font-medium">
+                  {user?.firstName} {user?.lastName}
+                </h3>
+                <p className="text-sm">{user?.email}</p>
               </div>
             </div>
 
             <div className="flex h-19 flex-col justify-center bg-[#F4F6FF] px-4">
               <h6 className="text-sm font-medium">CertifyTrusts</h6>
-              <p className="text-xs">ID: 028845</p>
+              <p className="text-xs">ID: {user?.id}</p>
             </div>
 
             {/* Dynamic menu items */}

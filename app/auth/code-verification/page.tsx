@@ -28,7 +28,7 @@ const CodeVerification = () => {
   const { mutate: resend, isPending: resending } = useResendIssuerOTP();
   const email = useAppSelector((state) => state.signUpEmail.signUpEmail);
 
-  const [otp, setOtp] = useState(["", "", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
   const handleChange = (value: string, index: number) => {
@@ -113,7 +113,7 @@ const CodeVerification = () => {
         onSuccess: (response) => {
           toast.success(response?.message || " success");
           dispatch(setSignUpEmail(null));
-          // push("/auth/login");
+          push("/auth/login");
           // push("/dashboard/overview");
         },
         onError: handleApiError,
@@ -178,7 +178,7 @@ const CodeVerification = () => {
             </div>
 
             {/* OTP Inputs */}
-            <div className="flex items-center justify-center gap-3 sm:gap-5">
+            <div className="flex items-center justify-center gap-3 sm:gap-4">
               {otp.map((digit, index) => (
                 <input
                   key={index}
@@ -194,7 +194,7 @@ const CodeVerification = () => {
                   onChange={(e) => handleChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   onPaste={handlePaste}
-                  className="h-12.5 w-10 border-b border-[#222C996B] text-center text-2xl font-semibold text-[#101828] transition-all outline-none focus:border-[#5324FB] focus:ring-0 focus:ring-[#5324FB]/20 min-[1168px]:w-24 sm:h-18"
+                  className="h-12.5 w-10 border-b border-[#222C996B] text-center text-2xl font-semibold text-[#101828] transition-all outline-none focus:border-[#5324FB] focus:ring-0 focus:ring-[#5324FB]/20 min-[1168px]:w-20 sm:h-18"
                 />
               ))}
             </div>

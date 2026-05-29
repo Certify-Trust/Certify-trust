@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import loginImage from "@/public/auth/login.svg";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader } from "lucide-react";
 import GoBackButton from "@/components/back-button";
 import { year } from "@/constants/date";
 import useAppSelector from "@/hooks/useAppSelector";
@@ -17,6 +17,11 @@ import SignupLayer from "@/components/layers/SignupLayer";
 import recipientIMG from "@/public/auth/recipientIMG.svg";
 import RecipientLogin from "@/components/auth/RecipientLogin";
 import { useRouter } from "next/navigation";
+import { useSignIn } from "@/hooks/useAuth";
+import { toast } from "sonner";
+import { handleApiError } from "@/lib/errorHelper";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import { setUser } from "@/redux/reducers/userSlice";
 
 const schema = z.object({
   email: z
@@ -25,12 +30,15 @@ const schema = z.object({
     .nonempty("Email is required")
     .trim()
     .toLowerCase(),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 type FormData = z.infer<typeof schema>;
 
 const LoginScreen = () => {
+  const dispatch = useAppDispatch();
   const { push } = useRouter();
+  const { mutate, isPending } = useSignIn();
   const selectedRole = useAppSelector((state) => state.auth.selectedRole);
 
   const methods = useForm<FormData>({
@@ -44,9 +52,28 @@ const LoginScreen = () => {
   } = methods;
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    mutate(data, {
+      onSuccess: (response) => {
+        const session = response.session;
 
-    push("/auth/code-verification");
+        if (!session) {
+          toast.error("Invalid login response");
+          return;
+        }
+        toast.success("Login successful");
+        dispatch(
+          setUser({
+            user: session.user,
+            accessToken: session.accessToken,
+          }),
+        );
+
+        push("/dashboard/overview");
+      },
+      onError: handleApiError,
+    });
+
+    // push("/auth/code-verification");
   };
   return selectedRole === "issuer" ? (
     <div className="flex h-screen">
@@ -65,7 +92,7 @@ const LoginScreen = () => {
             </h2>
 
             <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                 <CustomInput
                   name="email"
                   id="email"
@@ -76,6 +103,20 @@ const LoginScreen = () => {
                   error={
                     errors.email?.message
                       ? String(errors.email.message)
+                      : undefined
+                  }
+                />
+
+                <CustomInput
+                  name="password"
+                  id="password"
+                  label="Password"
+                  type="password"
+                  labelClass="text-gray-700"
+                  placeholder="Enter your password"
+                  error={
+                    errors.password?.message
+                      ? String(errors.password.message)
                       : undefined
                   }
                 />
@@ -92,17 +133,11 @@ const LoginScreen = () => {
                 <Button
                   type="submit"
                   size="full"
-                  className=""
-                  disabled={!isValid}
+                  className="flex items-center gap-2"
+                  disabled={!isValid || isPending}
                 >
-                  Login
-                  {/* {isLoading ? (
-              <div>
-                <PacmanLoader color="white" size={10} />
-              </div>
-            ) : (
-              'Log in'
-            )} */}
+                  {isPending && <Loader className="h-4 w-4 animate-spin" />}
+                  <span>Login</span>
                 </Button>
               </form>
             </FormProvider>

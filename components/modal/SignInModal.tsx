@@ -78,19 +78,19 @@ const SignInModal = () => {
         })}
       </div>
 
-      <Link
-        href="/auth/login"
-        className="w-full"
-        onClick={() => {
-          if (selectedRole) {
-            dispatch(setSelectedRole(selectedRole));
-          }
-        }}
-      >
-        <Button size="full" className="mt-4" disabled={!selectedRole}>
+      <Button size="full" className="mt-4" disabled={!selectedRole}>
+        <Link
+          href="/auth/login"
+          className="w-full"
+          onClick={() => {
+            if (selectedRole) {
+              dispatch(setSelectedRole(selectedRole));
+            }
+          }}
+        >
           Continue
-        </Button>
-      </Link>
+        </Link>
+      </Button>
 
       <div className="flex justify-center text-center text-sm text-gray-600">
         <p>

@@ -3,25 +3,26 @@ import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
-  const protectedRoutes = ["/dashboard"];
-  const authRoute = "/";
+  const pathname = req.nextUrl.pathname;
 
-  if (
-    !token &&
-    protectedRoutes.some((route) => req.nextUrl.pathname.startsWith(route))
-  ) {
-    return NextResponse.redirect(new URL(authRoute, req.url));
+  // Redirect unauthenticated users away from protected routes
+  if (!token && pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/auth/login", req.url));
   }
 
-  if (token && req.nextUrl.pathname.startsWith(authRoute)) {
-    return NextResponse.redirect(new URL("/dashboard", req.url)); // Redirect logged-in users away from sign-in
+  // Redirect authenticated users away from auth pages
+  if (token && pathname.startsWith("/auth")) {
+    return NextResponse.redirect(new URL("/dashboard/overview", req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/sign-in"],
+  matcher: ["/dashboard/:path*", "/auth/:path*"],
 };

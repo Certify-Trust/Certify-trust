@@ -9,12 +9,14 @@ import Trophy from "@/assets/icons/Trophy";
 import { ActionsDropdown } from "@/components/dropdown/ActionsDropDown";
 import { Button } from "@/components/ui/button";
 import { recipientData, reportData, setupCards } from "@/constants/mockdata";
+import useAppSelector from "@/hooks/useAppSelector";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const OverviewScreen = () => {
   const { push } = useRouter();
+  const user = useAppSelector((state) => state.user.user);
 
   return (
     <div className="min-h-screen space-y-5">
@@ -22,7 +24,7 @@ const OverviewScreen = () => {
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
         <div>
           <h1 className="flex items-center text-2xl font-semibold text-[#101828]">
-            Welcome, Sandra! <span className="ml-2">👋</span>
+            Welcome, {user?.firstName}! <span className="ml-2">👋</span>
           </h1>
 
           <p className="mt-1 text-base text-[#667085]">

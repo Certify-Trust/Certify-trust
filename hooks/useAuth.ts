@@ -33,6 +33,30 @@ const useSignIn = () => {
     },
   });
 };
+const useSignInRecipint = () => {
+  return useMutation({
+    mutationFn: async (userData: LoginPayload) => {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: userData.email,
+        password: userData.password,
+      });
+
+      if (res && !res.error) {
+        const session = await getSession();
+
+        if (session && session.accessToken) {
+          const authToken = session.accessToken;
+          localStorage.setItem("authToken", authToken);
+        }
+
+        return { res, session };
+      } else {
+        throw new Error(res?.error || "Failed to sign in");
+      }
+    },
+  });
+};
 
 const useRegisterIssuer = () => {
   return useMutation<AuthResponse, Error, RegisterPayload>({
@@ -109,6 +133,7 @@ export {
   useVerifyIssuer,
   useResendIssuerOTP,
   useResendRecipientOTP,
+  useSignInRecipint,
   //   useForgotPassword,
   //   useVerifyPassword,
   //   useResendVerificationMail,

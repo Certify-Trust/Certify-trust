@@ -27,7 +27,7 @@ const Hero = () => {
             className="relative aspect-[7/6] w-full flex-1 min-[1024px]:w-[48%]"
           >
             <Image
-              src="/home/Hero.svg"
+              src="/home/Hero.png"
               alt="Hero"
               fill
               className="object-cover"

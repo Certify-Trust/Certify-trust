@@ -16,6 +16,11 @@ import SignupLayer from "@/components/layers/SignupLayer";
 import { useRouter } from "next/navigation";
 import { setSelectedRole } from "@/redux/reducers/authSlice";
 import useAppDispatch from "@/hooks/useAppDispatch";
+import { useRegisterRecipient } from "@/hooks/useAuth";
+import { setSignUpEmail } from "@/redux/reducers/email";
+import { toast } from "sonner";
+import { handleApiError } from "@/lib/errorHelper";
+import { Loader } from "lucide-react";
 
 interface RecipientSignUpProps {
   fromIssuer?: boolean;
@@ -57,10 +62,21 @@ const RecipientSignUp = ({ fromIssuer = false }: RecipientSignUpProps) => {
     formState: { errors, isValid },
   } = methods;
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const { mutate, isPending } = useRegisterRecipient();
 
-    push("/auth/verify-email");
+  const onSubmit = (data: FormData) => {
+    const { confirmPassword, ...payload } = data;
+
+    mutate(payload, {
+      onSuccess: (response) => {
+        toast.success(response?.message || "Account created successfully");
+
+        dispatch(setSignUpEmail(payload.email));
+        push("/auth/code-verification");
+      },
+
+      onError: handleApiError,
+    });
   };
   return (
     <div className="flex min-h-screen">
@@ -185,17 +201,11 @@ const RecipientSignUp = ({ fromIssuer = false }: RecipientSignUpProps) => {
                 <Button
                   type="submit"
                   size="full"
-                  className=""
-                  disabled={!isValid}
+                  className="flex items-center gap-2"
+                  disabled={!isValid || isPending}
                 >
+                  {isPending && <Loader className="h-4 w-4 animate-spin" />}
                   Sign Up
-                  {/* {isLoading ? (
-              <div>
-                <PacmanLoader color="white" size={10} />
-              </div>
-            ) : (
-              'Log in'
-            )} */}
                 </Button>
               </form>
             </FormProvider>
