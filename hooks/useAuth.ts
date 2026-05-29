@@ -1,6 +1,7 @@
 import Auth_API from "@/services/api/auth";
 import {
   AuthResponse,
+  LoginPayload,
   OTPPayload,
   RegisterPayload,
   VerifyPayload,
@@ -10,7 +11,7 @@ import { getSession, signIn } from "next-auth/react";
 
 const useSignIn = () => {
   return useMutation({
-    mutationFn: async (userData: any) => {
+    mutationFn: async (userData: LoginPayload) => {
       const res = await signIn("credentials", {
         redirect: false,
         email: userData.email,

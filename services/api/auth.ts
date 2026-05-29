@@ -8,7 +8,7 @@ import type {
 } from "@/types/auth";
 
 class Auth_API {
-  static async loginUser(userData: RegisterPayload): Promise<AuthResponse> {
+  static async loginUser(userData: LoginPayload): Promise<AuthResponse> {
     return await axiosService({
       method: "POST",
       data: userData,
