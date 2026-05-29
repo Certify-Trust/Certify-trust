@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useGroupForm } from "@/context/GroupFormContext";
 
 const RecipientSupport = () => {
-  const [supportType, setSupportType] = useState<"email" | "helpdesk">("helpdesk");
+  const { formData, updateFormData } = useGroupForm();
 
   return (
     <div className="rounded-lg border border-[#EAECF0] p-6 space-y-5">
       <div>
         <h2 className="text-base font-semibold text-[#101828]">Support Requests</h2>
-        <p className="text-sm text-[#667085] mt-2">How should users get in touch with you for support or questions?</p>
+        <p className="text-sm text-[#667085]">How should users get in touch with you for support or questions?</p>
       </div>
 
       <div className="flex items-center gap-6">
@@ -20,8 +20,8 @@ const RecipientSupport = () => {
             type="radio"
             name="supportType"
             value="email"
-            checked={supportType === "email"}
-            onChange={() => setSupportType("email")}
+            checked={formData.supportType === "email"}
+            onChange={() => updateFormData({ supportType: "email" })}
             className="h-4 w-4 accent-[#7F56D9]"
           />
           Email your Support Contact
@@ -32,18 +32,23 @@ const RecipientSupport = () => {
             type="radio"
             name="supportType"
             value="helpdesk"
-            checked={supportType === "helpdesk"}
-            onChange={() => setSupportType("helpdesk")}
+            checked={formData.supportType === "helpdesk"}
+            onChange={() => updateFormData({ supportType: "helpdesk" })}
             className="h-4 w-4 accent-[#7F56D9]"
           />
           Helpdesk Form
         </label>
       </div>
 
-      {supportType === "helpdesk" && (
+      {formData.supportType === "helpdesk" && (
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-[#344054]">Your Helpdesk URL</label>
-          <Input placeholder="http://..." className="h-11 border-gray-300" />
+          <Input
+            placeholder="http://..."
+            value={formData.helpdeskUrl}
+            onChange={(e) => updateFormData({ helpdeskUrl: e.target.value })}
+            className="h-11"
+          />
         </div>
       )}
 

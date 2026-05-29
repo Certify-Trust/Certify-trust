@@ -10,6 +10,7 @@ import MarketMyCourses from "./MarketmyCourses";
 import BrandSettings from "./BrandSettings";
 import CustomInput from "@/components/custom-input/custom-input";
 import { useForm, FormProvider } from "react-hook-form";
+import { useGroupForm } from "@/context/GroupFormContext";
 
 const TABS = ["General Settings", "Brand Settings", "Recipient Support", "Market My Courses"] as const;
 type Tab = (typeof TABS)[number];
@@ -18,7 +19,7 @@ type Tab = (typeof TABS)[number];
 
 const GeneralInformation = () => {
   const methods = useForm();
-  const [description, setDescription] = useState("");
+  const { formData, updateFormData } = useGroupForm();
 
   return (
     <FormProvider {...methods}>
@@ -29,18 +30,36 @@ const GeneralInformation = () => {
         </div>
 
         <div>
-          <CustomInput id="issuer-name" type="text" label="Issuer Name" inputClass="w-full" />
+          <CustomInput
+            id="issuer-name"
+            type="text"
+            label="Issuer Name"
+            inputClass="w-full"
+            value={formData.issuerName}
+            onChange={(e) => updateFormData({ issuerName: e.target.value })}
+          />
           <p className="text-xs text-[#667085]">Name of the credential issuer displayed on credential</p>
         </div>
 
         <div>
-          <CustomInput id="website" type="text" label="Website" inputClass="w-full" />
+          <CustomInput
+            id="website"
+            type="text"
+            label="Website"
+            inputClass="w-full"
+            value={formData.website}
+            onChange={(e) => updateFormData({ website: e.target.value })}
+          />
           <p className="text-xs text-[#667085]">Website for your organization</p>
         </div>
 
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-[#344054]">Default Category</label>
-          <select className="h-11 w-full rounded-lg border border-[#D0D5DD] bg-white px-3 text-sm text-[#344054] focus:outline-none">
+          <select
+            value={formData.defaultCategory}
+            onChange={(e) => updateFormData({ defaultCategory: e.target.value })}
+            className="h-11 w-full rounded-lg border border-[#D0D5DD] bg-white px-3 text-sm text-[#344054] focus:outline-none"
+          >
             <option value=""></option>
           </select>
         </div>
@@ -48,7 +67,12 @@ const GeneralInformation = () => {
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-[#344054]">Description</label>
           <p className="text-xs text-[#667085]">A description for your organization</p>
-          <RichTextEditor value={description} onChange={setDescription} placeholder="Type description here." rows={4} />
+          <RichTextEditor
+            value={formData.orgDescription}
+            onChange={(val) => updateFormData({ orgDescription: val })}
+            placeholder="Type description here."
+            rows={4}
+          />
         </div>
 
         <Button className="h-10 px-8 text-white hover:bg-[#6941C6]">Save</Button>
@@ -61,14 +85,16 @@ const GeneralInformation = () => {
 
 const SocialMediaAccounts = () => {
   const methods = useForm();
-  const fields = [
-    "LinkedIn Org. ID",
-    "LinkedIn URL",
-    "Twitter Username",
-    "Facebook URL",
-    "Instagram Username",
-    "TikTok Username",
-    "YouTube Username",
+  const { formData, updateFormData } = useGroupForm();
+
+  const fields: { label: string; key: keyof typeof formData }[] = [
+    { label: "LinkedIn Org. ID", key: "linkedInOrgId" },
+    { label: "LinkedIn URL", key: "linkedInUrl" },
+    { label: "Twitter Username", key: "twitterUsername" },
+    { label: "Facebook URL", key: "facebookUrl" },
+    { label: "Instagram Username", key: "instagramUsername" },
+    { label: "TikTok Username", key: "tikTokUsername" },
+    { label: "YouTube Username", key: "youTubeUsername" },
   ];
 
   return (
@@ -81,11 +107,13 @@ const SocialMediaAccounts = () => {
 
         {fields.map((field) => (
           <CustomInput
-            key={field}
-            id={field.toLowerCase().replace(/\s/g, "-")}
+            key={field.key}
+            id={field.key}
             type="text"
-            label={field}
+            label={field.label}
             inputClass="w-full"
+            value={formData[field.key] as string}
+            onChange={(e) => updateFormData({ [field.key]: e.target.value })}
           />
         ))}
 

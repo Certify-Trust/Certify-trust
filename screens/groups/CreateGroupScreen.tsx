@@ -41,7 +41,12 @@ const CreateGroupScreen = () => {
           <Button variant="outline" className="h-10">Create Credentials</Button>
           <Button variant="outline" className="h-10">Update Credentials</Button>
           <Button variant="outline" className="h-10">View Credentials (0)</Button>
-          <Button className="h-10 bg-[#5324FB] text-white hover:bg-[#6941C6]">Preview</Button>
+     <Button
+  onClick={() => router.push("/dashboard/groups/create/preview")}
+  className="h-10 bg-[#7F56D9] text-white hover:bg-[#6941C6]"
+>
+  Preview
+</Button>
         </div>
       </div>
 

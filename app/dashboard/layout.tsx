@@ -4,6 +4,7 @@ import DashboardHeader from "@/components/dashboard/header";
 import Sidebar from "@/components/dashboard/sidebar";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import { CredentialsProvider } from "@/context/CredentialsContext";
 
 export default function DashboardLayout({
   children,
@@ -11,17 +12,14 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-
   const hideLayout = pathname === "/dashboard/designs/create";
 
   return (
     <main>
       <div className="flex min-h-screen">
         {!hideLayout && <Sidebar />}
-
         <div className="w-full bg-white">
           {!hideLayout && <DashboardHeader />}
-
           <div className="custom-scrollbar flex overflow-y-scroll">
             <div
               className={cn(
@@ -29,7 +27,9 @@ export default function DashboardLayout({
                 !hideLayout && "mt-8 mr-2 ml-4 pb-7 sm:mr-5 md:mr-6 lg:ml-7.5",
               )}
             >
-              {children}
+              <CredentialsProvider>
+                {children}
+              </CredentialsProvider>
             </div>
           </div>
         </div>
