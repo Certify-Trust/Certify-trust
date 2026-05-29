@@ -5,6 +5,7 @@ import type {
   AuthResponse,
   VerifyPayload,
   OTPPayload,
+  IssuerVerificationPayload,
 } from "@/types/auth";
 
 class Auth_API {
@@ -71,6 +72,16 @@ class Auth_API {
       method: "POST",
       data: userData,
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/recipient/resend-otp`,
+    });
+  }
+
+  static async issuerVerification(
+    userData: IssuerVerificationPayload,
+  ): Promise<AuthResponse> {
+    return axiosService<AuthResponse>({
+      method: "POST",
+      data: userData,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/issuer/verification/submit`,
     });
   }
 

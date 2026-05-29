@@ -52,26 +52,32 @@ const LoginScreen = () => {
   } = methods;
 
   const onSubmit = (data: FormData) => {
-    mutate(data, {
-      onSuccess: (response) => {
-        const session = response.session;
-
-        if (!session) {
-          toast.error("Invalid login response");
-          return;
-        }
-        toast.success("Login successful");
-        dispatch(
-          setUser({
-            user: session.user,
-            accessToken: session.accessToken,
-          }),
-        );
-
-        push("/dashboard/overview");
+    mutate(
+      {
+        ...data,
+        // role: selectedRole,
       },
-      onError: handleApiError,
-    });
+      {
+        onSuccess: (response) => {
+          const session = response.session;
+
+          if (!session) {
+            toast.error("Invalid login response");
+            return;
+          }
+          toast.success("Login successful");
+          dispatch(
+            setUser({
+              user: session.user,
+              accessToken: session.accessToken,
+            }),
+          );
+
+          push("/dashboard/overview");
+        },
+        onError: handleApiError,
+      },
+    );
 
     // push("/auth/code-verification");
   };

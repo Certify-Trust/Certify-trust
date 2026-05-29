@@ -6,6 +6,13 @@ import { ChevronLeft, Loader } from "lucide-react";
 import CustomInput from "@/components/custom-input/custom-input";
 import { FormProvider, useForm } from "react-hook-form";
 import { ContactInfo, OrgDetails, OrgProfile, Screen } from "@/types/input";
+import { useIssuerVerification } from "@/hooks/useAuth";
+import { toast } from "sonner";
+import { handleApiError } from "@/lib/errorHelper";
+import Modal from "@/components/modal/customModal";
+import SignInModal from "@/components/modal/SignInModal";
+import CertificateSuccess from "@/components/modal/CertificateSuccess";
+import { GroupFormProvider } from "@/context/GroupFormContext";
 
 // ─── Step Progress Bar
 
@@ -58,11 +65,14 @@ const Label = ({ children }: { children: React.ReactNode }) => (
   </label>
 );
 
+const FieldError = ({ message }: { message?: string }) =>
+  message ? <p className="mt-1 text-xs text-red-500">{message}</p> : null;
+
 const SelectInput = (props: React.SelectHTMLAttributes<HTMLSelectElement>) => (
   <div className="relative">
     <select
       {...props}
-      className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2.5 pr-8 text-sm text-gray-800 transition focus:border-[#5324FB] focus:ring-1 focus:ring-[#5324FB]/30 focus:outline-none"
+      className="w-full appearance-none rounded-sm border border-gray-300 bg-white px-3 py-2.5 pr-8 text-sm text-gray-800 transition focus:border-[#5324FB] focus:ring-1 focus:ring-[#5324FB]/30 focus:outline-none"
     />
     <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-xs text-gray-400">
       ▾
@@ -104,6 +114,77 @@ const NavButtons = ({
     </Button>
   </div>
 );
+
+// ─── Validation Helpers
+
+type Step1Errors = Partial<Record<keyof OrgDetails, string>>;
+type Step2Errors = Partial<Record<keyof OrgProfile, string>>;
+type Step3Errors = Partial<Record<keyof ContactInfo, string>>;
+
+const validateStep1 = (data: OrgDetails): Step1Errors => {
+  const errors: Step1Errors = {};
+  if (!data.corporateLegalName?.trim())
+    errors.corporateLegalName = "Corporate legal name is required.";
+  if (!data.corporateAddress?.trim())
+    errors.corporateAddress = "Corporate address is required.";
+  if (!data.country?.trim()) errors.country = "Country is required.";
+  if (!data.yearFounded?.toString().trim())
+    errors.yearFounded = "Year founded is required.";
+  else if (
+    isNaN(Number(data.yearFounded)) ||
+    Number(data.yearFounded) < 1800 ||
+    Number(data.yearFounded) > new Date().getFullYear()
+  )
+    errors.yearFounded = "Enter a valid year.";
+  if (!data.numberOfEmployees?.toString().trim())
+    errors.numberOfEmployees = "Number of employees is required.";
+  else if (
+    isNaN(Number(data.numberOfEmployees)) ||
+    Number(data.numberOfEmployees) < 1
+  )
+    errors.numberOfEmployees = "Enter a valid number of employees.";
+  if (!data.registrationId?.toString().trim())
+    errors.registrationId = "Registration ID is required.";
+  return errors;
+};
+
+const validateStep2 = (data: OrgProfile): Step2Errors => {
+  const errors: Step2Errors = {};
+  const urlPattern = /^https?:\/\/.+\..+/;
+  if (!data.organisationDescription?.trim())
+    errors.organisationDescription = "Organisation description is required.";
+  if (!data.corporateWebsiteUrl?.trim())
+    errors.corporateWebsiteUrl = "Website URL is required.";
+  else if (!urlPattern.test(data.corporateWebsiteUrl))
+    errors.corporateWebsiteUrl =
+      "Enter a valid URL (e.g. https://example.com).";
+  if (!data.organisationLinkedinUrl?.trim())
+    errors.organisationLinkedinUrl = "LinkedIn URL is required.";
+  else if (!urlPattern.test(data.organisationLinkedinUrl))
+    errors.organisationLinkedinUrl = "Enter a valid LinkedIn URL.";
+  if (!data.logoUrl?.trim()) errors.logoUrl = "Logo URL is required.";
+  else if (!urlPattern.test(data.logoUrl))
+    errors.logoUrl = "Enter a valid URL for the logo.";
+  return errors;
+};
+
+const validateStep3 = (data: ContactInfo): Step3Errors => {
+  const errors: Step3Errors = {};
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!data.businessContactEmail?.trim())
+    errors.businessContactEmail = "Business contact email is required.";
+  else if (!emailPattern.test(data.businessContactEmail))
+    errors.businessContactEmail = "Enter a valid email address.";
+  if (!data.corporateSignatoryFullName?.trim())
+    errors.corporateSignatoryFullName = "Signatory full name is required.";
+  if (!data.corporateSignatoryEmail?.trim())
+    errors.corporateSignatoryEmail = "Signatory email is required.";
+  else if (!emailPattern.test(data.corporateSignatoryEmail))
+    errors.corporateSignatoryEmail = "Enter a valid email address.";
+  if (!data.corporateSignatoryTitle?.trim())
+    errors.corporateSignatoryTitle = "Signatory title is required.";
+  return errors;
+};
 
 // ─── Intro Screen
 
@@ -222,85 +303,114 @@ const Step1 = ({
   onBack: () => void;
   onNext: () => void;
 }) => {
+  const [errors, setErrors] = useState<Step1Errors>({});
+
   const set =
     (k: keyof OrgDetails) =>
     (
       e: React.ChangeEvent<
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
       >,
-    ) =>
+    ) => {
       onChange({ ...data, [k]: e.target.value });
+      // Clear the error for this field on change
+      if (errors[k]) setErrors((prev) => ({ ...prev, [k]: undefined }));
+    };
+
+  const handleNext = () => {
+    const errs = validateStep1(data);
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+    onNext();
+  };
 
   return (
     <div>
-      {/* <StepProgress current={1} /> */}
       <h2 className="text-lg font-semibold text-[#101828]">
         Verify Your Organisation
       </h2>
       <p className="mb-5 text-gray-500">Fill in your Organisation details</p>
 
       <div className="space-y-4">
-        <CustomInput
-          name="corporateLegalName"
-          id="corporateLegalName"
-          label="Corporate Legal Name *"
-          type="text"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("corporateLegalName")}
-          // error={errors.corporateLegalName?.message ? String(errors.corporateLegalName.message) : undefined}
-        />
+        <div>
+          <CustomInput
+            name="corporateLegalName"
+            id="corporateLegalName"
+            label="Corporate Legal Name *"
+            type="text"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("corporateLegalName")}
+            value={data.corporateLegalName}
+          />
+          <FieldError message={errors.corporateLegalName} />
+        </div>
 
-        <CustomInput
-          name="corporateAddress"
-          id="corporateAddress"
-          label="Corporate Address *"
-          type="textarea"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("corporateAddress")}
-          // error={errors.corporateAddress?.message ? String(errors.corporateAddress.message) : undefined}
-        />
+        <div>
+          <CustomInput
+            name="corporateAddress"
+            id="corporateAddress"
+            label="Corporate Address *"
+            type="textarea"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("corporateAddress")}
+            value={data.corporateAddress}
+          />
+          <FieldError message={errors.corporateAddress} />
+        </div>
 
-        <CustomInput
-          name="country"
-          id="country"
-          label="Country *"
-          type="select"
-          options={[
-            { id: "1", value: "United States", label: "United States" },
-            { id: "2", value: "United Kingdom", label: "United Kingdom" },
-            { id: "3", value: "Canada", label: "Canada" },
-            { id: "4", value: "Australia", label: "Australia" },
-            { id: "5", value: "Germany", label: "Germany" },
-            { id: "6", value: "France", label: "France" },
-            { id: "7", value: "Nigeria", label: "Nigeria" },
-            { id: "8", value: "South Africa", label: "South Africa" },
-            { id: "9", value: "India", label: "India" },
-            { id: "10", value: "Other", label: "Other" },
-          ]}
-          labelClass="text-gray-700 font-medium"
-          onChange={set("country")}
-          // error={errors.country?.message ? String(errors.country.message) : undefined}
-        />
+        <div>
+          <CustomInput
+            name="country"
+            id="country"
+            label="Country *"
+            type="select"
+            options={[
+              { id: "0", value: "", label: "Select a country" },
+              { id: "1", value: "United States", label: "United States" },
+              { id: "2", value: "United Kingdom", label: "United Kingdom" },
+              { id: "3", value: "Canada", label: "Canada" },
+              { id: "4", value: "Australia", label: "Australia" },
+              { id: "5", value: "Germany", label: "Germany" },
+              { id: "6", value: "France", label: "France" },
+              { id: "7", value: "Nigeria", label: "Nigeria" },
+              { id: "8", value: "South Africa", label: "South Africa" },
+              { id: "9", value: "India", label: "India" },
+              { id: "10", value: "Other", label: "Other" },
+            ]}
+            labelClass="text-gray-700 font-medium"
+            onChange={set("country")}
+            value={data.country}
+          />
+          <FieldError message={errors.country} />
+        </div>
 
-        <CustomInput
-          name="yearFounded"
-          id="yearFounded"
-          label="Corporate Address *"
-          type="number"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("yearFounded")}
-          // error={errors.yearFounded?.message ? String(errors.yearFounded.message) : undefined}
-        />
+        <div>
+          <CustomInput
+            name="yearFounded"
+            id="yearFounded"
+            label="Year Founded *"
+            type="number"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("yearFounded")}
+            value={data.yearFounded}
+          />
+          <FieldError message={errors.yearFounded} />
+        </div>
 
-        <CustomInput
-          name="numberOfEmployees"
-          id="numberOfEmployees"
-          label="Number of Employees *"
-          type="number"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("numberOfEmployees")}
-          // error={errors.numberOfEmployees?.message ? String(errors.numberOfEmployees.message) : undefined}
-        />
+        <div>
+          <CustomInput
+            name="numberOfEmployees"
+            id="numberOfEmployees"
+            label="Number of Employees *"
+            type="number"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("numberOfEmployees")}
+            value={data.numberOfEmployees}
+          />
+          <FieldError message={errors.numberOfEmployees} />
+        </div>
 
         <div>
           <Label>DUNS Number / LEI / Corporate Registration ID *</Label>
@@ -321,18 +431,18 @@ const Step1 = ({
               <CustomInput
                 name="registrationId"
                 id="registrationId"
-                // label="Number of Employees *"
-                type="number"
+                type="text"
                 labelClass="text-gray-700 font-medium"
                 onChange={set("registrationId")}
-                // error={errors.registrationId?.message ? String(errors.registrationId.message) : undefined}
+                value={data.registrationId}
               />
+              <FieldError message={errors.registrationId} />
             </div>
           </div>
         </div>
       </div>
 
-      <NavButtons onBack={onBack} onNext={onNext} />
+      <NavButtons onBack={onBack} onNext={handleNext} />
     </div>
   );
 };
@@ -350,63 +460,93 @@ const Step2 = ({
   onBack: () => void;
   onNext: () => void;
 }) => {
+  const [errors, setErrors] = useState<Step2Errors>({});
+
   const set =
     (k: keyof OrgProfile) =>
     (
       e: React.ChangeEvent<
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
       >,
-    ) =>
+    ) => {
       onChange({ ...data, [k]: e.target.value });
+      if (errors[k]) setErrors((prev) => ({ ...prev, [k]: undefined }));
+    };
+
+  const handleNext = () => {
+    const errs = validateStep2(data);
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+    onNext();
+  };
 
   return (
     <div>
       <div className="space-y-4">
-        <CustomInput
-          name="organisationDescription"
-          id="organisationDescription"
-          label="Organisation Description *"
-          type="textarea"
-          placeholder="Describe your organisation"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("organisationDescription")}
-        />
+        <div>
+          <CustomInput
+            name="organisationDescription"
+            id="organisationDescription"
+            label="Organisation Description *"
+            type="textarea"
+            placeholder="Describe your organisation"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("organisationDescription")}
+            value={data.organisationDescription}
+          />
+          <FieldError message={errors.organisationDescription} />
+        </div>
 
-        <CustomInput
-          name="corporateWebsiteUrl"
-          id="corporateWebsiteUrl"
-          label="Corporate Website URL *"
-          type="url"
-          placeholder="https://certifytrusts.com"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("corporateWebsiteUrl")}
-        />
+        <div>
+          <CustomInput
+            name="corporateWebsiteUrl"
+            id="corporateWebsiteUrl"
+            label="Corporate Website URL *"
+            type="url"
+            placeholder="https://certifytrusts.com"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("corporateWebsiteUrl")}
+            value={data.corporateWebsiteUrl}
+          />
+          <FieldError message={errors.corporateWebsiteUrl} />
+        </div>
 
-        <CustomInput
-          name="organisationLinkedinUrl"
-          id="organisationLinkedinUrl"
-          label="Organisation LinkedIn Page URL *"
-          type="url"
-          placeholder="https://linkedin.com/company/example"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("organisationLinkedinUrl")}
-        />
+        <div>
+          <CustomInput
+            name="organisationLinkedinUrl"
+            id="organisationLinkedinUrl"
+            label="Organisation LinkedIn Page URL *"
+            type="url"
+            placeholder="https://linkedin.com/company/example"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("organisationLinkedinUrl")}
+            value={data.organisationLinkedinUrl}
+          />
+          <FieldError message={errors.organisationLinkedinUrl} />
+        </div>
 
-        <CustomInput
-          name="logoUrl"
-          id="logoUrl"
-          label="Logo URL *"
-          type="url"
-          placeholder="https://example.com/logo.png"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("logoUrl")}
-        />
+        <div>
+          <CustomInput
+            name="logoUrl"
+            id="logoUrl"
+            label="Logo URL *"
+            type="url"
+            placeholder="https://example.com/logo.png"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("logoUrl")}
+            value={data.logoUrl}
+          />
+          <FieldError message={errors.logoUrl} />
+        </div>
       </div>
 
-      <NavButtons onBack={onBack} onNext={onNext} />
+      <NavButtons onBack={onBack} onNext={handleNext} />
     </div>
   );
 };
+
 // ─── Step 3: Contact & Signatory
 
 const Step3 = ({
@@ -422,62 +562,91 @@ const Step3 = ({
   onSubmit: () => void;
   loading: boolean;
 }) => {
+  const [errors, setErrors] = useState<Step3Errors>({});
+
   const set =
     (k: keyof ContactInfo) =>
     (
       e: React.ChangeEvent<
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
       >,
-    ) =>
+    ) => {
       onChange({ ...data, [k]: e.target.value });
+      if (errors[k]) setErrors((prev) => ({ ...prev, [k]: undefined }));
+    };
+
+  const handleSubmit = () => {
+    const errs = validateStep3(data);
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+    onSubmit();
+  };
 
   return (
     <div>
       <div className="space-y-4">
-        <CustomInput
-          name="businessContactEmail"
-          id="businessContactEmail"
-          label="Business Contact Email *"
-          type="email"
-          placeholder="business@email.com"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("businessContactEmail")}
-        />
+        <div>
+          <CustomInput
+            name="businessContactEmail"
+            id="businessContactEmail"
+            label="Business Contact Email *"
+            type="email"
+            placeholder="business@email.com"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("businessContactEmail")}
+            value={data.businessContactEmail}
+          />
+          <FieldError message={errors.businessContactEmail} />
+        </div>
 
-        <CustomInput
-          name="corporateSignatoryFullName"
-          id="corporateSignatoryFullName"
-          label="Corporate Signatory Full Name *"
-          type="text"
-          placeholder="Brenda Hoves"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("corporateSignatoryFullName")}
-        />
+        <div>
+          <CustomInput
+            name="corporateSignatoryFullName"
+            id="corporateSignatoryFullName"
+            label="Corporate Signatory Full Name *"
+            type="text"
+            placeholder="Brenda Hoves"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("corporateSignatoryFullName")}
+            value={data.corporateSignatoryFullName}
+          />
+          <FieldError message={errors.corporateSignatoryFullName} />
+        </div>
 
-        <CustomInput
-          name="corporateSignatoryEmail"
-          id="corporateSignatoryEmail"
-          label="Corporate Signatory Email *"
-          type="email"
-          placeholder="brenda@business.com"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("corporateSignatoryEmail")}
-        />
+        <div>
+          <CustomInput
+            name="corporateSignatoryEmail"
+            id="corporateSignatoryEmail"
+            label="Corporate Signatory Email *"
+            type="email"
+            placeholder="brenda@business.com"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("corporateSignatoryEmail")}
+            value={data.corporateSignatoryEmail}
+          />
+          <FieldError message={errors.corporateSignatoryEmail} />
+        </div>
 
-        <CustomInput
-          name="corporateSignatoryTitle"
-          id="corporateSignatoryTitle"
-          label="Corporate Signatory Title *"
-          type="text"
-          placeholder="Chief Executive Officer"
-          labelClass="text-gray-700 font-medium"
-          onChange={set("corporateSignatoryTitle")}
-        />
+        <div>
+          <CustomInput
+            name="corporateSignatoryTitle"
+            id="corporateSignatoryTitle"
+            label="Corporate Signatory Title *"
+            type="text"
+            placeholder="Chief Executive Officer"
+            labelClass="text-gray-700 font-medium"
+            onChange={set("corporateSignatoryTitle")}
+            value={data.corporateSignatoryTitle}
+          />
+          <FieldError message={errors.corporateSignatoryTitle} />
+        </div>
       </div>
 
       <NavButtons
         onBack={onBack}
-        onNext={onSubmit}
+        onNext={handleSubmit}
         nextLabel="Submit Form"
         loading={loading}
       />
@@ -487,133 +656,149 @@ const Step3 = ({
 
 // ─── Success Screen
 
-const SuccessScreen = () => (
-  <div className="space-y-4 leading-relaxed text-gray-500">
-    <div className="mb-6 flex items-start gap-2">
-      <h2 className="text-lg font-semibold text-gray-800">
-        Submission Successful! Thanks for your information.
-      </h2>
-    </div>
+const SuccessScreen = ({ onVerified }: { onVerified: () => void }) => {
+  const [verified, setVerified] = React.useState(false);
 
-    <p>
-      You have successfully submitted your organization verification request.
-      You&apos;ll be notified once the verification is completed. Please feel
-      free to contact{" "}
-      <a
-        href="mailto:support@certifytrusts.com"
-        className="text-[#5324FB] underline"
-      >
-        support@certifytrusts.com
-      </a>{" "}
-      for further information.
-    </p>
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setVerified(true);
+      onVerified(); // triggers  modal
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, [onVerified]);
 
-    <p>
-      Thank you for taking the initial steps to secure and elevate your
-      institution&apos;s digital credentials with blockchain technology through
-      the Velocity Network. Here&apos;s what happens next:
-    </p>
+  return (
+    <div className="space-y-4 leading-relaxed text-gray-500">
+      <div className="mb-6 flex items-start gap-2">
+        <h2 className="text-lg font-semibold text-gray-800">
+          Submission Successful! Thanks for your information.
+        </h2>
+      </div>
 
-    <ol className="list-inside list-decimal space-y-3 pl-2 font-semibold">
-      <li>
-        <span className="font-bold">KYB Verification:</span>{" "}
-        <span className="font-normal">
-          Our team will review the information provided and initiate the
-          Know-Your-Business process. You&apos;ll receive an update on your
-          verification status shortly.
-        </span>
-      </li>
-      <li>
-        <span className="font-semibold"> Velocity Network Registration:</span>{" "}
-        <span className="font-normal">
-          Upon successful verification, your designated administrator will
-          receive an email invitation to complete the Velocity Network
-          registration.
-        </span>
-      </li>
-    </ol>
-
-    <p>
-      Please ensure that your signatory authority looks for this email and
-      approves it promptly to avoid delays in becoming a verified issuer on the
-      Velocity Network.
-    </p>
-
-    <div>
-      <p className="font-bold">What&apos;s Next?</p>
-      <p className="mt-1">
-        After your institution is successfully registered and approved on the
-        Velocity Network, you will be equipped to issue verifiable digital
-        credentials globally, secured by blockchain technology. This not only
-        enhances your credibility but also places you at the forefront of
-        digital credential innovation.
+      <p>
+        You have successfully submitted your organization verification request.
+        You&apos;ll be notified once the verification is completed. Please feel
+        free to contact{" "}
+        <a
+          href="mailto:support@certifytrusts.com"
+          className="text-[#5324FB] underline"
+        >
+          support@certifytrusts.com
+        </a>{" "}
+        for further information.
       </p>
-    </div>
 
-    <div>
-      <p className="font-bold">Need Help?</p>
-      <p className="mt-1">
-        For any questions or support during this process, please reach out to
-        our customer support team.
+      <p>
+        Thank you for taking the initial steps to secure and elevate your
+        institution&apos;s digital credentials with blockchain technology
+        through the Velocity Network. Here&apos;s what happens next:
       </p>
-    </div>
 
-    <p>
-      We&apos;re excited to have you on board and look forward to empowering
-      your digital credentialing journey with CertifyTrusts and Velocity
-      Network!
-    </p>
+      <ol className="list-inside list-decimal space-y-3 pl-2 font-semibold">
+        <li>
+          <span className="font-bold">KYB Verification:</span>{" "}
+          <span className="font-normal">
+            Our team will review the information provided and initiate the
+            Know-Your-Business process. You&apos;ll receive an update on your
+            verification status shortly.
+          </span>
+        </li>
+        <li>
+          <span className="font-semibold"> Velocity Network Registration:</span>{" "}
+          <span className="font-normal">
+            Upon successful verification, your designated administrator will
+            receive an email invitation to complete the Velocity Network
+            registration.
+          </span>
+        </li>
+      </ol>
 
-    <div className="pt-2">
-      <Button
-        disabled
-        className="flex cursor-not-allowed items-center gap-2 bg-[#5324FB]/20 px-4 py-2.5 text-sm font-semibold text-[#5324FB]"
-      >
-        <Loader className="h-4 w-4 animate-spin" />
-        Verification in Progress
-      </Button>
+      <p>
+        Please ensure that your signatory authority looks for this email and
+        approves it promptly to avoid delays in becoming a verified issuer on
+        the Velocity Network.
+      </p>
+
+      <div>
+        <p className="font-bold">What&apos;s Next?</p>
+        <p className="mt-1">
+          After your institution is successfully registered and approved on the
+          Velocity Network, you will be equipped to issue verifiable digital
+          credentials globally, secured by blockchain technology. This not only
+          enhances your credibility but also places you at the forefront of
+          digital credential innovation.
+        </p>
+      </div>
+
+      <div>
+        <p className="font-bold">Need Help?</p>
+        <p className="mt-1">
+          For any questions or support during this process, please reach out to
+          our customer support team.
+        </p>
+      </div>
+
+      <p>
+        We&apos;re excited to have you on board and look forward to empowering
+        your digital credentialing journey with CertifyTrusts and Velocity
+        Network!
+      </p>
+
+      <div className="pt-2">
+        {!verified ? (
+          <Button
+            disabled
+            className="flex cursor-not-allowed items-center gap-2 bg-[#5324FB]/20 px-4 py-2.5 text-sm font-semibold text-[#5324FB]"
+          >
+            <Loader className="h-4 w-4 animate-spin" />
+            Verification in Progress
+          </Button>
+        ) : (
+          <Button className="flex items-center gap-2 bg-[#5324FB] px-4 py-2.5 text-sm font-semibold text-white">
+            Verification Complete
+          </Button>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // ─── Multi-step wrapper
 
-const MultiStepFlow = ({ onBack }: { onBack: () => void }) => {
+const MultiStepFlow = ({
+  onBack,
+  onSubmit,
+  submitting,
+  orgDetails,
+  setOrgDetails,
+  orgProfile,
+  setOrgProfile,
+  contactInfo,
+  setContactInfo,
+  onVerified,
+}: {
+  onBack: () => void;
+  onSubmit: () => void;
+  submitting: boolean;
+  orgDetails: OrgDetails;
+  setOrgDetails: (d: OrgDetails) => void;
+  orgProfile: OrgProfile;
+  setOrgProfile: (d: OrgProfile) => void;
+  contactInfo: ContactInfo;
+  setContactInfo: (d: ContactInfo) => void;
+  onVerified: () => void;
+}) => {
   const [step, setStep] = useState<1 | 2 | 3 | "success">(1);
-  const [submitting, setSubmitting] = useState(false);
-
-  const [orgDetails, setOrgDetails] = useState<OrgDetails>({
-    corporateLegalName: "",
-    corporateAddress: "",
-    country: "",
-    yearFounded: "",
-    numberOfEmployees: "",
-    idType: "duns",
-    registrationId: "",
-  });
-
-  const [orgProfile, setOrgProfile] = useState<OrgProfile>({
-    organisationDescription: "",
-    corporateWebsiteUrl: "",
-    organisationLinkedinUrl: "",
-    logoUrl: "",
-  });
-
-  const [contactInfo, setContactInfo] = useState<ContactInfo>({
-    businessContactEmail: "",
-    corporateSignatoryFullName: "",
-    corporateSignatoryEmail: "",
-    corporateSignatoryTitle: "",
-  });
-
-  const handleSubmit = async () => {
-    setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1500));
-    setSubmitting(false);
-    setStep("success");
-  };
 
   const isSuccess = step === "success";
+
+  const prevSubmitting = React.useRef(submitting);
+  React.useEffect(() => {
+    if (prevSubmitting.current && !submitting) {
+      setStep("success");
+    }
+    prevSubmitting.current = submitting;
+  }, [submitting]);
 
   return (
     <div className="min-h-screen space-y-5">
@@ -667,11 +852,11 @@ const MultiStepFlow = ({ onBack }: { onBack: () => void }) => {
             data={contactInfo}
             onChange={setContactInfo}
             onBack={() => setStep(2)}
-            onSubmit={handleSubmit}
+            onSubmit={onSubmit}
             loading={submitting}
           />
         )}
-        {isSuccess && <SuccessScreen />}
+        {isSuccess && <SuccessScreen onVerified={onVerified} />}
       </div>
     </div>
   );
@@ -681,13 +866,93 @@ const MultiStepFlow = ({ onBack }: { onBack: () => void }) => {
 
 const VerificationScreen = () => {
   const [screen, setScreen] = useState<Screen>("intro");
+  const [successModal, setSuccessModal] = useState(false);
   const methods = useForm();
+  const { mutate, isPending } = useIssuerVerification();
+
+  const [orgDetails, setOrgDetails] = useState<OrgDetails>({
+    corporateLegalName: "",
+    corporateAddress: "",
+    country: "",
+    yearFounded: "",
+    numberOfEmployees: "",
+    idType: "duns",
+    registrationId: "",
+  });
+
+  const [orgProfile, setOrgProfile] = useState<OrgProfile>({
+    organisationDescription: "",
+    corporateWebsiteUrl: "",
+    organisationLinkedinUrl: "",
+    logoUrl: "",
+  });
+
+  const [contactInfo, setContactInfo] = useState<ContactInfo>({
+    businessContactEmail: "",
+    corporateSignatoryFullName: "",
+    corporateSignatoryEmail: "",
+    corporateSignatoryTitle: "",
+  });
+
+  const handleSubmit = () => {
+    const payload = {
+      corporate_legal_name: orgDetails.corporateLegalName,
+      corporate_address: orgDetails.corporateAddress,
+      country: orgDetails.country,
+      year_founded: Number(orgDetails.yearFounded),
+      number_of_employees: Number(orgDetails.numberOfEmployees),
+      registration_id: orgDetails.registrationId,
+      organisation_description: orgProfile.organisationDescription,
+      corporate_website_url: orgProfile.corporateWebsiteUrl,
+      linkedin_page_url: orgProfile.organisationLinkedinUrl,
+      logo_url: orgProfile.logoUrl,
+      business_contact_email: contactInfo.businessContactEmail,
+      signatory_full_name: contactInfo.corporateSignatoryFullName,
+      signatory_email: contactInfo.corporateSignatoryEmail,
+      signatory_title: contactInfo.corporateSignatoryTitle,
+    };
+
+    mutate(payload, {
+      onSuccess: (response) => {
+        toast.success(response?.message || "Submitted successfully");
+      },
+      onError: handleApiError,
+    });
+  };
 
   if (screen !== "intro") {
     return (
-      <FormProvider {...methods}>
-        <MultiStepFlow onBack={() => setScreen("intro")} />
-      </FormProvider>
+      <>
+        <FormProvider {...methods}>
+          <MultiStepFlow
+            onVerified={() => setSuccessModal(true)} // ← fires after 7s
+            onBack={() => setScreen("intro")}
+            onSubmit={handleSubmit}
+            submitting={isPending}
+            orgDetails={orgDetails}
+            setOrgDetails={setOrgDetails}
+            orgProfile={orgProfile}
+            setOrgProfile={setOrgProfile}
+            contactInfo={contactInfo}
+            setContactInfo={setContactInfo}
+          />
+        </FormProvider>
+        {successModal && (
+          <Modal
+            size="full"
+            headerTextStyle="text-xl font-medium"
+            closeIconSize="text-2xl"
+            headerStyle="text-xl flex justify-between px-[32px] pt-[22px]"
+            header={true}
+            isOpen={successModal}
+            onClose={() => setSuccessModal(false)}
+          >
+            <GroupFormProvider>
+              <CertificateSuccess />
+            </GroupFormProvider>
+          </Modal>
+        )}
+      </>
     );
   }
 

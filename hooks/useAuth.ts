@@ -1,6 +1,7 @@
 import Auth_API from "@/services/api/auth";
 import {
   AuthResponse,
+  IssuerVerificationPayload,
   LoginPayload,
   OTPPayload,
   RegisterPayload,
@@ -96,6 +97,12 @@ const useResendRecipientOTP = () => {
       Auth_API.resendRecipientOTP(userData).then((res) => res.data),
   });
 };
+const useIssuerVerification = () => {
+  return useMutation<AuthResponse, Error, IssuerVerificationPayload>({
+    mutationFn: (userData) =>
+      Auth_API.issuerVerification(userData).then((res) => res.data),
+  });
+};
 
 // const useForgotPassword = () => {
 //   return useMutation({
@@ -134,6 +141,7 @@ export {
   useResendIssuerOTP,
   useResendRecipientOTP,
   useSignInRecipint,
+  useIssuerVerification,
   //   useForgotPassword,
   //   useVerifyPassword,
   //   useResendVerificationMail,
