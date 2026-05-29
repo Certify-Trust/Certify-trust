@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
 
 export type ActionItem = {
-  label: string;
+  label: string | ReactNode;
   onClick?: () => void;
   disabled?: boolean;
   destructive?: boolean;

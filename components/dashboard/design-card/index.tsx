@@ -1,10 +1,19 @@
+// DesignCard.tsx
+
 import { Button } from "@/components/ui/button";
-import { Ellipsis } from "lucide-react";
+import { ActionsDropdown } from "@/components/dropdown/ActionsDropDown";
+import { Ellipsis, Trash2 } from "lucide-react";
 import Image from "next/image";
 import certificateIMG from "@/public/dashboard/certificate.png";
 import Link from "next/link";
 
-const DesignCard = ({ href }: { href: string }) => {
+const DesignCard = ({
+  href,
+  onDelete,
+}: {
+  href: string;
+  onDelete?: () => void;
+}) => {
   return (
     <div className="flex min-h-92.25 w-full flex-col gap-6 border border-[#D0D5DD] p-4.5">
       <div>
@@ -26,9 +35,24 @@ const DesignCard = ({ href }: { href: string }) => {
             <Link href={href}>Edit</Link>
           </Button>
 
-          <Button className="w-12.25" variant="pricing" size="icon">
-            <Ellipsis />
-          </Button>
+          <ActionsDropdown
+            trigger={
+              <Button className="w-12.25" variant="pricing" size="icon">
+                <Ellipsis />
+              </Button>
+            }
+            items={[
+              {
+                label: (
+                  <span className="flex items-center gap-2 text-red-600">
+                    <Trash2 size={15} />
+                    Delete
+                  </span>
+                ),
+                onClick: () => onDelete?.(),
+              },
+            ]}
+          />
         </div>
       </div>
     </div>

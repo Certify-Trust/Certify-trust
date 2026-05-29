@@ -10,9 +10,12 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import DesignCard from "@/components/dashboard/design-card";
 import useAppSelector from "@/hooks/useAppSelector";
+import { removeDesign } from "@/redux/reducers/designSlice";
+import useAppDispatch from "@/hooks/useAppDispatch";
 
 const DesignsScreen = () => {
   const { push } = useRouter();
+  const dispatch = useAppDispatch();
   const designs = useAppSelector((state) => state.designs.designs);
 
   return (
@@ -68,30 +71,14 @@ const DesignsScreen = () => {
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {designs.map((item, index) => (
-            <DesignCard key={index} href="/dashboard/designs/create" />
+            <DesignCard
+              key={index}
+              href="/dashboard/designs/create"
+              onDelete={() => dispatch(removeDesign(item.id))}
+            />
           ))}
         </div>
       )}
-
-      {/* {
-        <div className="flex min-h-[50vh] items-center justify-center">
-          <EmptyState
-            icon={<EmptyStateIcon />}
-            description="You don’t have any certificate or badge designs yet. Create your first design now!"
-            actions={[
-              {
-                label: "Create Badge Design",
-                onClick: () => push("/dashboard/designs/create"),
-                variant: "pricing",
-              },
-              {
-                label: "Create Certificate Design",
-                onClick: () => push("/dashboard/designs/create"),
-              },
-            ]}
-          />
-        </div>
-      } */}
     </div>
   );
 };

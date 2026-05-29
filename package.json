@@ -20,6 +20,7 @@
     "framer-motion": "^12.35.2",
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
+    "next-auth": "^4.24.14",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "radix-ui": "^1.4.3",
